@@ -3,6 +3,7 @@ package com.locationbasedfoodieservice.member.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.locationbasedfoodieservice.common.entity.Timestamped;
 import com.locationbasedfoodieservice.review.entity.Review;
 
 import jakarta.persistence.Column;
@@ -13,7 +14,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 
 @Entity
-public class Member {
+public class Member extends Timestamped {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

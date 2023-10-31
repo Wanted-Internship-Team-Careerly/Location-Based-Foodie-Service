@@ -1,5 +1,6 @@
 package com.locationbasedfoodieservice.review.entity;
 
+import com.locationbasedfoodieservice.common.entity.Timestamped;
 import com.locationbasedfoodieservice.member.entity.Member;
 import com.locationbasedfoodieservice.store.entity.Store;
 
@@ -13,7 +14,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
 @Entity
-public class Review {
+public class Review extends Timestamped {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
