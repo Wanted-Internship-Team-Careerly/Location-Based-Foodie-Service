@@ -11,9 +11,7 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.locationbasedfoodieservice.member.dto.MemberSignupRequestDto;
-import com.locationbasedfoodieservice.member.dto.MemberSignupResponseDto;
 import com.locationbasedfoodieservice.member.entity.Member;
 import com.locationbasedfoodieservice.member.repository.MemberRepository;
 
@@ -28,9 +26,6 @@ class MemberServiceTest {
 
 	@Spy
 	private BCryptPasswordEncoder passwordEncoder;
-
-	@Spy
-	private ObjectMapper objectMapper;
 
 	@Test
 	void 회원가입_test() throws Exception {
@@ -58,12 +53,9 @@ class MemberServiceTest {
 		when(memberRepository.save(any())).thenReturn(member);
 
 		// when
-		MemberSignupResponseDto responseDto = memberService.signup(requestDto);
+		memberService.signup(requestDto);
 
 		// then
-		String responseBody = objectMapper.writeValueAsString(responseDto);
-		System.out.println("테스트: " + responseBody);
-
-		assertThat(responseDto.getAccount()).isEqualTo("test");
+		assertThat(member.getAccount()).isEqualTo("test");
 	}
 }
