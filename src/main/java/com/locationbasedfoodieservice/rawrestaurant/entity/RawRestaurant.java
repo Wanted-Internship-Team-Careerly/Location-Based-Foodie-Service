@@ -1,4 +1,4 @@
-package com.locationbasedfoodieservice.rawstore.entity;
+package com.locationbasedfoodieservice.rawrestaurant.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -7,7 +7,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity
-public class RawStore {
+public class RawRestaurant {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

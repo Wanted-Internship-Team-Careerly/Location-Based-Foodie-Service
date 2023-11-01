@@ -2,7 +2,7 @@ package com.locationbasedfoodieservice.review.entity;
 
 import com.locationbasedfoodieservice.common.entity.Timestamped;
 import com.locationbasedfoodieservice.member.entity.Member;
-import com.locationbasedfoodieservice.store.entity.Store;
+import com.locationbasedfoodieservice.restaurant.entity.Restaurant;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -31,6 +31,6 @@ public class Review extends Timestamped {
 	private Member member;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "store_id")
-	private Store store;
+	@JoinColumn(name = "restaurant_id")
+	private Restaurant restaurant;
 }

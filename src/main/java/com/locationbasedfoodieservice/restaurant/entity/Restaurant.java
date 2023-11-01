@@ -1,4 +1,4 @@
-package com.locationbasedfoodieservice.store.entity;
+package com.locationbasedfoodieservice.restaurant.entity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +13,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 
 @Entity
-public class Store {
+public class Restaurant {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -52,6 +52,6 @@ public class Store {
 	@Column
 	private Double latitude;
 
-	@OneToMany(mappedBy = "store", orphanRemoval = true)
+	@OneToMany(mappedBy = "restaurant", orphanRemoval = true)
 	private List<Review> reviewList = new ArrayList<>();
 }
