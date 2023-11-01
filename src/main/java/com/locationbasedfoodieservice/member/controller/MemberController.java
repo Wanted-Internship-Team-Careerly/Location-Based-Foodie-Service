@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.locationbasedfoodieservice.common.dto.ApiResponseDto;
 import com.locationbasedfoodieservice.member.dto.MemberSignupRequestDto;
-import com.locationbasedfoodieservice.member.dto.MemberSignupResponseDto;
 import com.locationbasedfoodieservice.member.service.MemberService;
 
 import jakarta.validation.Valid;
@@ -22,9 +22,9 @@ public class MemberController {
 	private final MemberService memberService;
 
 	@PostMapping("/signup")
-	public ResponseEntity<MemberSignupResponseDto> signup(@RequestBody @Valid MemberSignupRequestDto requestDto) {
-		MemberSignupResponseDto responseDto = memberService.signup(requestDto);
+	public ResponseEntity<ApiResponseDto> signup(@RequestBody @Valid MemberSignupRequestDto requestDto) {
+		memberService.signup(requestDto);
 
-		return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
+		return ResponseEntity.ok().body(new ApiResponseDto(HttpStatus.CREATED.value(), "회원 가입 완료"));
 	}
 }
