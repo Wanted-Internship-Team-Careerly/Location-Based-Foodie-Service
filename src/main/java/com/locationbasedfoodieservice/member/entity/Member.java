@@ -12,7 +12,15 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@Getter
 @Entity
 public class Member extends Timestamped {
 
@@ -35,6 +43,7 @@ public class Member extends Timestamped {
 	@Column(nullable = false)
 	private Boolean isSuggestion;
 
+	@Builder.Default
 	@OneToMany(mappedBy = "member", orphanRemoval = true)
 	private List<Review> reviewList = new ArrayList<>();
 }
