@@ -1,16 +1,15 @@
 package com.locationbasedfoodieservice.restaurant.entity;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.locationbasedfoodieservice.review.entity.Review;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import java.util.ArrayList;
+import java.util.List;
+import org.locationtech.jts.geom.Point;
 
 @Entity
 public class Restaurant {
@@ -51,6 +50,9 @@ public class Restaurant {
 
 	@Column
 	private Double latitude;
+
+	@Column(columnDefinition = "POINT SRID 4326")
+	private Point coordinate;
 
 	@OneToMany(mappedBy = "restaurant", orphanRemoval = true)
 	private List<Review> reviewList = new ArrayList<>();
