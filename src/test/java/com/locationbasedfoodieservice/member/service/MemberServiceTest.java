@@ -1,6 +1,7 @@
 package com.locationbasedfoodieservice.member.service;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import java.util.Optional;
@@ -14,6 +15,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.locationbasedfoodieservice.common.config.auth.LoginMember;
+import com.locationbasedfoodieservice.common.error.CustomErrorCode;
+import com.locationbasedfoodieservice.common.exception.CustomException;
 import com.locationbasedfoodieservice.member.dto.MemberSignupRequestDto;
 import com.locationbasedfoodieservice.member.dto.MemberUpdateRequestDto;
 import com.locationbasedfoodieservice.member.entity.Member;
@@ -90,5 +93,32 @@ class MemberServiceTest {
 		assertThat(member.getLatitude()).isEqualTo(22.222);
 		assertThat(member.getLongitude()).isEqualTo(22.222);
 		assertThat(member.getIsSuggestion()).isEqualTo(true);
+	}
+
+	@Test
+	void 업데이트_실패_찾을_수_없는_회원_번호_test() throws Exception {
+		// given
+		MemberUpdateRequestDto requestDto = new MemberUpdateRequestDto();
+		requestDto.setLatitude(22.222);
+		requestDto.setLongitude(22.222);
+		requestDto.setIsSuggestion(true);
+
+		// stub 1
+		Member member = Member.builder()
+			.account("test")
+			.password("1234")
+			.latitude(11.111)
+			.longitude(11.111)
+			.isSuggestion(false)
+			.build();
+		when(memberRepository.findById(any())).thenReturn(Optional.empty());
+
+		// when
+		LoginMember loginMember = new LoginMember(member);
+		CustomException customException = assertThrows(CustomException.class,
+			() -> memberService.update(member.getId(), requestDto, loginMember));
+
+		// then
+		assertEquals(CustomErrorCode.USER_NOT_FOUND.getErrorMessage(), customException.getMessage());
 	}
 }
