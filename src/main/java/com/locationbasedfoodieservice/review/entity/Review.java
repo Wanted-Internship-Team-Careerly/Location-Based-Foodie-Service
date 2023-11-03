@@ -12,8 +12,14 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Review extends Timestamped {
 
 	@Id
@@ -33,4 +39,12 @@ public class Review extends Timestamped {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "restaurant_id")
 	private Restaurant restaurant;
+
+	@Builder
+	public Review(Integer score, String content, Member member, Restaurant restaurant) {
+		this.score = score;
+		this.content = content;
+		this.member = member;
+		this.restaurant = restaurant;
+	}
 }
