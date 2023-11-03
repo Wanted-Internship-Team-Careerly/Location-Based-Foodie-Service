@@ -13,7 +13,7 @@ public class JwtProcess {
 	// 토큰 생성
 	public static String create(LoginMember loginMember) {
 		String jwtToken = JWT.create()
-			.withSubject("foodie")
+			.withSubject(loginMember.getUsername())
 			.withExpiresAt(new Date(System.currentTimeMillis() + JwtVO.EXPIRATION_TIME))
 			.withClaim("id", loginMember.getMember().getId())
 			.withClaim("role", "MEMBER")
