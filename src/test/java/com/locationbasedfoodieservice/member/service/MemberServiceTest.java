@@ -121,4 +121,41 @@ class MemberServiceTest {
 		// then
 		assertEquals(CustomErrorCode.USER_NOT_FOUND.getErrorMessage(), customException.getMessage());
 	}
+
+	@Test
+	void 업데이트_실패_토큰_계정이_일치하지_않을때_test() throws Exception {
+		// given
+		MemberUpdateRequestDto requestDto = new MemberUpdateRequestDto();
+		requestDto.setLatitude(22.222);
+		requestDto.setLongitude(22.222);
+		requestDto.setIsSuggestion(true);
+
+		Member hong = Member.builder()
+			.id(1L)
+			.account("hong")
+			.password("1234")
+			.latitude(11.111)
+			.longitude(11.111)
+			.isSuggestion(false)
+			.build();
+		LoginMember loginMember = new LoginMember(hong);
+
+		// stub 1
+		Member kim = Member.builder()
+			.id(2L)
+			.account("kim")
+			.password("1234")
+			.latitude(11.111)
+			.longitude(11.111)
+			.isSuggestion(false)
+			.build();
+		when(memberRepository.findById(any())).thenReturn(Optional.of(kim));
+
+		// when
+		CustomException customException = assertThrows(CustomException.class,
+			() -> memberService.update(kim.getId(), requestDto, loginMember));
+
+		// then
+		assertEquals(CustomErrorCode.TOKEN_USER_MISMATCH.getErrorMessage(), customException.getMessage());
+	}
 }
