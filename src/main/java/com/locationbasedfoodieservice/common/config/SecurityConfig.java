@@ -51,7 +51,7 @@ public class SecurityConfig {
 		// jSessionId를 서버쪽에서 관리 X
 		http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
-		// react, 앱으로 요청할 예정
+		// security에서 제공하는 Login form 사용하지 않음
 		http.formLogin(AbstractHttpConfigurer::disable);
 
 		// httpBasic은 브라우저가 팝업창을 이용해서 사용자 인증을 진행한다.
