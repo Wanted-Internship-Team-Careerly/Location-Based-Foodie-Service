@@ -1,3 +1,12 @@
+---
+name: Feature
+about: feature 이슈 템플릿
+title: ''
+labels: ''
+assignees: ''
+
+---
+
 ## 📌 Feature Issue
 <!-- 과제에 대해 설명해주세요 -->
 

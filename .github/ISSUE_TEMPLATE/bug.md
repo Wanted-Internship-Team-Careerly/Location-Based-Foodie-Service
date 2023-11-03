@@ -1,3 +1,12 @@
+---
+name: Bug
+about: bug 이슈 템플릿
+title: ''
+labels: ''
+assignees: ''
+
+---
+
 ## 📌 Bug Issue
 <!-- 에러에 대해 설명해주세요 -->
 
