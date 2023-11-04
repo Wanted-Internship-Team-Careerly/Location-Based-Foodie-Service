@@ -41,7 +41,7 @@ class ReviewServiceTest {
     void setUp() {
         member = Member.builder()
                 .id(1L)
-                .account("account")
+                .account("account1")
                 .password("pw")
                 .latitude(1.1)
                 .longitude(1.1)
