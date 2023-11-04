@@ -17,6 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import com.locationbasedfoodieservice.common.config.auth.LoginMember;
 import com.locationbasedfoodieservice.common.error.CustomErrorCode;
 import com.locationbasedfoodieservice.common.exception.CustomException;
+import com.locationbasedfoodieservice.member.dto.MemberResponseDto;
 import com.locationbasedfoodieservice.member.dto.MemberSignupRequestDto;
 import com.locationbasedfoodieservice.member.dto.MemberUpdateRequestDto;
 import com.locationbasedfoodieservice.member.entity.Member;
@@ -157,5 +158,32 @@ class MemberServiceTest {
 
 		// then
 		assertEquals(CustomErrorCode.TOKEN_USER_MISMATCH.getErrorMessage(), customException.getMessage());
+	}
+
+	@Test
+	void 회원_정보_조회_test() throws Exception {
+		// given
+		Member hong = Member.builder()
+			.id(1L)
+			.account("hong")
+			.password("1234")
+			.latitude(11.111)
+			.longitude(11.111)
+			.isSuggestion(false)
+			.build();
+		LoginMember loginMember = new LoginMember(hong);
+
+		// stub 1
+		when(memberRepository.findById(any())).thenReturn(Optional.of(hong));
+
+		// when
+		MemberResponseDto responseDto = memberService.get(1L, loginMember);
+
+		// then
+		assertThat(responseDto.getId()).isEqualTo(1L);
+		assertThat(responseDto.getAccount()).isEqualTo("hong");
+		assertThat(responseDto.getLatitude()).isEqualTo(11.111);
+		assertThat(responseDto.getLongitude()).isEqualTo(11.111);
+		assertThat(responseDto.getIsSuggestion()).isFalse();
 	}
 }
