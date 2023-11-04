@@ -3,6 +3,7 @@ package com.locationbasedfoodieservice.review.controller;
 import com.locationbasedfoodieservice.review.dto.request.ReviewRequestDto;
 import com.locationbasedfoodieservice.review.dto.response.ReviewResponseDto;
 import com.locationbasedfoodieservice.review.service.ReviewService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,7 +19,7 @@ public class ReviewController {
     private final ReviewService reviewService;
 
     @PostMapping
-    public ResponseEntity<ReviewResponseDto> createReview(@RequestBody ReviewRequestDto request) {
+    public ResponseEntity<ReviewResponseDto> createReview(@RequestBody @Valid ReviewRequestDto request) {
 
         return ResponseEntity.ok().body(reviewService.createReview(request));
     }
