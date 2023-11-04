@@ -36,7 +36,7 @@ public class MemberController {
 	@PutMapping("/{memberId}")
 	public ResponseEntity<ApiResponseDto> update(
 		@PathVariable Long memberId,
-		@RequestBody @Valid MemberUpdateRequestDto requestDto,
+		@RequestBody MemberUpdateRequestDto requestDto,
 		@AuthenticationPrincipal LoginMember loginMember) {
 		memberService.update(memberId, requestDto, loginMember);
 
