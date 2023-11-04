@@ -2,8 +2,6 @@ package com.locationbasedfoodieservice.review.repository;
 
 import static com.locationbasedfoodieservice.review.entity.QReview.review;
 
-import com.locationbasedfoodieservice.review.entity.Review;
-import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -18,12 +16,11 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom{
     @Override
     public Integer findCountByRestaurantId(Long restaurantId) {
 
-        JPAQuery<Review> query = queryFactory.select(review)
+        return Math.toIntExact(queryFactory
+                .select(review.count())
                 .where(review.restaurant.id.eq(restaurantId))
-                .fetchAll();
-
-        return query.fetch().size();
-
+                .from(review)
+                .fetchFirst());
     }
 
 }
