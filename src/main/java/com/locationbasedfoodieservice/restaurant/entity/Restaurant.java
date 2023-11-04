@@ -65,10 +65,11 @@ public class Restaurant {
 	private List<Review> reviewList = new ArrayList<>();
 
 	@Builder
-	public Restaurant(String nameAddress, String city, String name, String licenseDate,
+	public Restaurant(Long id, String nameAddress, String city, String name, String licenseDate,
 			String businessStatus,
 			String type, String streetAddress, String lotNumberAddress, String postalCode,
 			Double longitude, Double latitude) {
+		this.id = id;
 		this.nameAddress = nameAddress;
 		this.city = city;
 		this.name = name;
