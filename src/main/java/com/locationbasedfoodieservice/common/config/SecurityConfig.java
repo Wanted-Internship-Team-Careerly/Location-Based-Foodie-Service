@@ -73,7 +73,7 @@ public class SecurityConfig {
 
 		http.authorizeHttpRequests(
 			authorizeHttpRequests -> authorizeHttpRequests
-				.requestMatchers("/api/members/**").permitAll()
+				.requestMatchers("/api/members/**", "/api/reviews/**").permitAll()
 				.anyRequest().authenticated()
 		);
 		return http.build();
