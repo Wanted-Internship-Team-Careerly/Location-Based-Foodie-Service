@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.locationbasedfoodieservice.common.config.auth.LoginMember;
 import com.locationbasedfoodieservice.common.error.CustomErrorCode;
 import com.locationbasedfoodieservice.common.exception.CustomException;
+import com.locationbasedfoodieservice.member.dto.MemberResponseDto;
 import com.locationbasedfoodieservice.member.dto.MemberSignupRequestDto;
 import com.locationbasedfoodieservice.member.dto.MemberUpdateRequestDto;
 import com.locationbasedfoodieservice.member.entity.Member;
@@ -41,5 +42,17 @@ public class MemberService {
 		}
 
 		member.update(requestDto.getLatitude(), requestDto.getLongitude(), requestDto.getIsSuggestion());
+	}
+
+	@Transactional(readOnly = true)
+	public MemberResponseDto get(Long memberId, LoginMember loginMember) {
+		Member member = memberRepository.findById(memberId)
+			.orElseThrow(() -> new CustomException(CustomErrorCode.USER_NOT_FOUND));
+
+		if (!Objects.equals(member.getId(), loginMember.getMember().getId())) {
+			throw new CustomException(CustomErrorCode.TOKEN_USER_MISMATCH);
+		}
+
+		return MemberResponseDto.fromEntity(member);
 	}
 }
