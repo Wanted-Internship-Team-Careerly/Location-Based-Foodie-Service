@@ -15,7 +15,7 @@ public class ReviewRequestDto {
 
     private Long memberId;
 
-    private Long restaurant_id;
+    private Long restaurantId;
 
     public Review toEntity(Member member, Restaurant restaurant) {
         return Review.builder()
