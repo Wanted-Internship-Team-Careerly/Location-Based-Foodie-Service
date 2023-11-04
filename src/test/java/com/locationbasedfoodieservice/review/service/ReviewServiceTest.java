@@ -65,7 +65,6 @@ class ReviewServiceTest {
                 .member(member)
                 .restaurant(restaurant)
                 .build();
-        reviewRepository.save(review);
     }
 
     @AfterEach
