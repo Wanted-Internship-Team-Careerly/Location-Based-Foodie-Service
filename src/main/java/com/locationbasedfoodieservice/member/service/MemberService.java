@@ -34,25 +34,25 @@ public class MemberService {
 
 	@Transactional
 	public void update(Long memberId, MemberUpdateRequestDto requestDto, LoginMember loginMember) {
-		Member member = memberRepository.findById(memberId)
-			.orElseThrow(() -> new CustomException(CustomErrorCode.USER_NOT_FOUND));
-
-		if (!Objects.equals(member.getId(), loginMember.getMember().getId())) {
-			throw new CustomException(CustomErrorCode.TOKEN_USER_MISMATCH);
-		}
+		Member member = getValidateMember(memberId, loginMember);
 
 		member.update(requestDto.getLatitude(), requestDto.getLongitude(), requestDto.getIsSuggestion());
 	}
 
 	@Transactional(readOnly = true)
 	public MemberResponseDto get(Long memberId, LoginMember loginMember) {
+		Member member = getValidateMember(memberId, loginMember);
+
+		return MemberResponseDto.fromEntity(member);
+	}
+
+	private Member getValidateMember(Long memberId, LoginMember loginMember) {
 		Member member = memberRepository.findById(memberId)
 			.orElseThrow(() -> new CustomException(CustomErrorCode.USER_NOT_FOUND));
 
 		if (!Objects.equals(member.getId(), loginMember.getMember().getId())) {
 			throw new CustomException(CustomErrorCode.TOKEN_USER_MISMATCH);
 		}
-
-		return MemberResponseDto.fromEntity(member);
+		return member;
 	}
 }
