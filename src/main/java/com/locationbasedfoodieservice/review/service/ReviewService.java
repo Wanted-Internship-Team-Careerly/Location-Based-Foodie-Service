@@ -1,7 +1,11 @@
 package com.locationbasedfoodieservice.review.service;
 
+import com.locationbasedfoodieservice.common.error.CustomErrorCode;
+import com.locationbasedfoodieservice.common.exception.CustomException;
 import com.locationbasedfoodieservice.member.entity.Member;
+import com.locationbasedfoodieservice.member.repository.MemberRepository;
 import com.locationbasedfoodieservice.restaurant.entity.Restaurant;
+import com.locationbasedfoodieservice.restaurant.repository.RestaurantRepository;
 import com.locationbasedfoodieservice.review.dto.request.ReviewRequestDto;
 import com.locationbasedfoodieservice.review.dto.response.ReviewResponseDto;
 import com.locationbasedfoodieservice.review.entity.Review;
@@ -16,21 +20,24 @@ import org.springframework.transaction.annotation.Transactional;
 public class ReviewService {
 
     private final ReviewRepository reviewRepository;
+    private final MemberRepository memberRepository;
+    private final RestaurantRepository restaurantRepository;
 
     // member, restaurant 는 이미 생성되었다고 가정
     public ReviewResponseDto createReview(ReviewRequestDto request) {
 
-        Member member = Member.builder().account("account").password("password")
-                .isSuggestion(true).latitude(1.0).latitude(1.0).build();
-        Restaurant restaurant = Restaurant.builder().build();
+        Member member = memberRepository.findById(request.getMemberId())
+                .orElseThrow(() -> new CustomException(CustomErrorCode.USER_NOT_FOUND));
+
+        Restaurant restaurant = restaurantRepository.findById(request.getRestaurantId())
+                .orElseThrow(() -> new CustomException(CustomErrorCode.RESTAURANT_NOT_FOUND));
 
         Review savedReview = reviewRepository.save(request.toEntity(member, restaurant));
 
         int totalReviewNum = reviewRepository.findCountByRestaurantId(request.getRestaurantId());
         int reviewScore = request.getScore();
-        double avg = restaurant.getRating();
 
-        updateRestaurantRating(restaurant, totalReviewNum, reviewScore, avg);
+        checkAndUpdateRating(restaurant, totalReviewNum, reviewScore);
 
         return ReviewResponseDto.from(savedReview);
     }
@@ -42,10 +49,21 @@ public class ReviewService {
     // 리뷰 평점 업데이트
     private void updateRestaurantRating(Restaurant restaurant, int totalReviewNum,
             int reviewScore, double avg) {
+
         double calAvg = avg * totalReviewNum;
         double newCalAvg = calAvg + reviewScore;
         double resultAvg = newCalAvg / (totalReviewNum + 1);
         restaurant.updateRating(resultAvg);
+    }
+
+    private void checkAndUpdateRating(Restaurant restaurant, int totalReviewNum, int reviewScore) {
+
+        if (restaurant.getRating() != null) {
+            double avg = restaurant.getRating();
+            this.updateRestaurantRating(restaurant, totalReviewNum, reviewScore, avg);
+        } else {
+            restaurant.updateRating(reviewScore);
+        }
     }
 
 }
