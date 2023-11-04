@@ -84,6 +84,8 @@ public class ReviewControllerTest {
     @AfterEach
     void tearDown() {
         reviewRepository.deleteAll();
+        memberRepository.deleteAll();
+        restaurantRepository.deleteAll();
     }
 
 

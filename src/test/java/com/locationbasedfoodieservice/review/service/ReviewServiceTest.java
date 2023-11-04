@@ -70,6 +70,8 @@ class ReviewServiceTest {
     @AfterEach
     void tearDown() {
         reviewRepository.deleteAll();
+        memberRepository.deleteAll();
+        restaurantRepository.deleteAll();
     }
 
     @Test
