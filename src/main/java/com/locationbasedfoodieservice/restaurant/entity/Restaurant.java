@@ -13,9 +13,11 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Restaurant {
 
@@ -56,6 +58,9 @@ public class Restaurant {
 	@Column
 	private Double latitude;
 
+	@Column
+	private Double rating;
+
 	@OneToMany(mappedBy = "restaurant", orphanRemoval = true)
 	private List<Review> reviewList = new ArrayList<>();
 
@@ -75,5 +80,9 @@ public class Restaurant {
 		this.postalCode = postalCode;
 		this.longitude = longitude;
 		this.latitude = latitude;
+	}
+
+	public void updateRating(double rating) {
+		this.rating = rating;
 	}
 }
