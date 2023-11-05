@@ -1,5 +1,16 @@
 package com.locationbasedfoodieservice.review.service;
 
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
+
+import java.util.Optional;
+
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.locationbasedfoodieservice.member.entity.Member;
 import com.locationbasedfoodieservice.member.repository.MemberRepository;
@@ -9,85 +20,67 @@ import com.locationbasedfoodieservice.review.dto.request.ReviewRequestDto;
 import com.locationbasedfoodieservice.review.dto.response.ReviewResponseDto;
 import com.locationbasedfoodieservice.review.entity.Review;
 import com.locationbasedfoodieservice.review.repository.ReviewRepository;
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.test.context.support.TestExecutionEvent;
-import org.springframework.security.test.context.support.WithUserDetails;
-
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 class ReviewServiceTest {
 
-    @Autowired
+    @InjectMocks
     private ReviewService reviewService;
 
-    @Autowired
+    @Mock
     private ReviewRepository reviewRepository;
 
-    @Autowired
+    @Mock
     private RestaurantRepository restaurantRepository;
 
-    @Autowired
+    @Mock
     private MemberRepository memberRepository;
 
-    Member member;
-
-    Restaurant restaurant;
-
-    Review review;
-
-    @BeforeEach
-    void setUpMember() {
-        member = Member.builder()
-                .account("account")
+    @Test
+    void 리뷰_생성() {
+        //given
+        Member member = Member.builder()
+                .id(1L)
+                .account("account1")
                 .password("pw")
                 .latitude(1.1)
                 .longitude(1.1)
                 .isSuggestion(true)
                 .build();
-        memberRepository.save(member);
 
-        restaurant = Restaurant.builder()
+        Restaurant restaurant = Restaurant.builder()
+                .id(1L)
                 .name("name")
                 .nameAddress("address")
                 .businessStatus("bs")
                 .city("city")
                 .licenseDate("date")
                 .build();
-        restaurantRepository.save(restaurant);
 
-        review = Review.builder()
+        Review review = Review.builder()
                 .score(3)
                 .content("내용")
                 .member(member)
                 .restaurant(restaurant)
                 .build();
-    }
 
-    @AfterEach
-    void tearDown() {
-        reviewRepository.deleteAll();
-        memberRepository.deleteAll();
-        restaurantRepository.deleteAll();
-    }
-
-    @WithUserDetails(value = "account", setupBefore = TestExecutionEvent.TEST_EXECUTION)
-    @Test
-    void 리뷰_생성() {
-        //given
         ReviewRequestDto reviewRequestDto = new ReviewRequestDto(3, "내용", 1L, 1L);
 
+        // stub 1
+        when(memberRepository.findById(any())).thenReturn(Optional.of(member));
+
+        // stub 2
+        when(restaurantRepository.findById(any())).thenReturn(Optional.of(restaurant));
+
+        // stub 3
+        when(reviewRepository.save(any())).thenReturn(review);
 
         //when
-        ReviewResponseDto dto = reviewService.createReview(reviewRequestDto);
+        ReviewResponseDto responseDto = reviewService.createReview(reviewRequestDto);
 
         //then
-        Assertions.assertThat(dto.getScore()).isEqualTo(3);
-        Assertions.assertThat(dto.getContent()).isEqualTo("내용");
+        Assertions.assertThat(responseDto.getContent()).isEqualTo("내용");
+        Assertions.assertThat(responseDto.getScore()).isEqualTo(3L);
     }
 
 }
