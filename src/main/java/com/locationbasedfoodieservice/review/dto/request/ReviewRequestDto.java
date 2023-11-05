@@ -21,10 +21,10 @@ public class ReviewRequestDto {
     private String content;
 
     @NotNull
-    private long memberId;
+    private Long memberId;
 
     @NotNull
-    private long restaurantId;
+    private Long restaurantId;
 
     public Review toEntity(Member member, Restaurant restaurant) {
         return Review.builder()
