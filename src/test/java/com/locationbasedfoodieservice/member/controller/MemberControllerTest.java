@@ -39,6 +39,7 @@ class MemberControllerTest {
 	@BeforeEach
 	void setUp() {
 		Member member = Member.builder()
+			.id(1111L)
 			.account("test")
 			.password("1234")
 			.latitude(12.123)
