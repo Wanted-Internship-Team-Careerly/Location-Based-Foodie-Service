@@ -15,18 +15,19 @@ import com.locationbasedfoodieservice.review.entity.Review;
 import com.locationbasedfoodieservice.review.repository.ReviewRepository;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.TestExecutionEvent;
-import org.springframework.security.test.context.support.WithUserDetails;
+
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.transaction.annotation.Transactional;
 
 @AutoConfigureMockMvc
+@Transactional
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 public class ReviewControllerTest {
 
@@ -49,8 +50,16 @@ public class ReviewControllerTest {
     @Autowired
     private EntityManager em;
 
-    @BeforeEach
-    void setUp() {
+
+    @AfterEach
+    void tearDown() {
+
+    }
+
+
+    @Transactional
+    @Test
+    void 리뷰_생성() throws Exception {
         Member member = Member.builder()
                 .account("account")
                 .password("pw")
@@ -58,7 +67,9 @@ public class ReviewControllerTest {
                 .longitude(1.1)
                 .isSuggestion(true)
                 .build();
-        memberRepository.save(member);
+        Member savedMember = memberRepository.save(member);
+        System.out.println("savedMemberId" + savedMember.getId());
+        System.out.println("[검증] Review Controller memberSave 1");
 
         Restaurant restaurant = Restaurant.builder()
                 .name("name")
@@ -78,24 +89,13 @@ public class ReviewControllerTest {
         reviewRepository.save(review);
 
         em.clear();
-    }
 
-    @AfterEach
-    void tearDown() {
-        reviewRepository.deleteAll();
-        memberRepository.deleteAll();
-        restaurantRepository.deleteAll();
-    }
-
-
-    @WithUserDetails(value = "account", setupBefore = TestExecutionEvent.TEST_EXECUTION)
-    @Test
-    void 리뷰_생성() throws Exception {
         // given
-        ReviewRequestDto reviewRequestDto = new ReviewRequestDto(3, "내용", 1L, 1L);
+        ReviewRequestDto reviewRequestDto = new ReviewRequestDto(3, "내용", 4L, 1L);
 
         String requestBody = om.writeValueAsString(reviewRequestDto);
 
+        System.out.println("[검증] Review Controller memberSelect 2");
         // when
         ResultActions resultActions = mvc.perform(post("/api/reviews")
                 .content(requestBody)
