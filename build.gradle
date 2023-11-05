@@ -54,14 +54,14 @@ dependencies {
 
 }
 
-// QueryDSL
-sourceSets {
-    main {
-        java {
-            srcDirs = ["$projectDir/src/main/java", "$projectDir/build/generated"]
-        }
-    }
-}
+//QueryDSL
+//sourceSets {
+//    main {
+//        java {
+//            srcDirs = ["$projectDir/src/main/java", "$projectDir/build/generated"]
+//        }
+//    }
+//}
 
 tasks.named('test') {
     useJUnitPlatform()
