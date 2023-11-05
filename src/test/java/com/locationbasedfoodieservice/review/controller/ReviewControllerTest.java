@@ -21,6 +21,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.TestExecutionEvent;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
@@ -50,24 +52,22 @@ public class ReviewControllerTest {
     @BeforeEach
     void setUp() {
         Member member = Member.builder()
-                .id(1L)
-                .account("account1")
+                .account("account")
                 .password("pw")
                 .latitude(1.1)
                 .longitude(1.1)
                 .isSuggestion(true)
                 .build();
-        memberRepository.saveAndFlush(member);
+        memberRepository.save(member);
 
         Restaurant restaurant = Restaurant.builder()
-                .id(1L)
                 .name("name")
                 .nameAddress("address")
                 .businessStatus("bs")
                 .city("city")
                 .licenseDate("date")
                 .build();
-        restaurantRepository.saveAndFlush(restaurant);
+        restaurantRepository.save(restaurant);
 
         Review review = Review.builder()
                 .score(3)
@@ -76,7 +76,6 @@ public class ReviewControllerTest {
                 .restaurant(restaurant)
                 .build();
         reviewRepository.save(review);
-
 
         em.clear();
     }
@@ -89,6 +88,7 @@ public class ReviewControllerTest {
     }
 
 
+    @WithUserDetails(value = "account", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @Test
     void 리뷰_생성() throws Exception {
         // given
