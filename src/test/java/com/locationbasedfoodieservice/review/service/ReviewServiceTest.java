@@ -6,6 +6,7 @@ import com.locationbasedfoodieservice.member.repository.MemberRepository;
 import com.locationbasedfoodieservice.restaurant.entity.Restaurant;
 import com.locationbasedfoodieservice.restaurant.repository.RestaurantRepository;
 import com.locationbasedfoodieservice.review.dto.request.ReviewRequestDto;
+import com.locationbasedfoodieservice.review.dto.response.ReviewResponseDto;
 import com.locationbasedfoodieservice.review.entity.Review;
 import com.locationbasedfoodieservice.review.repository.ReviewRepository;
 import org.assertj.core.api.Assertions;
@@ -15,6 +16,8 @@ import org.junit.jupiter.api.Test;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.TestExecutionEvent;
+import org.springframework.security.test.context.support.WithUserDetails;
 
 @SpringBootTest
 class ReviewServiceTest {
@@ -38,26 +41,24 @@ class ReviewServiceTest {
     Review review;
 
     @BeforeEach
-    void setUp() {
+    void setUpMember() {
         member = Member.builder()
-                .id(1L)
-                .account("account1")
+                .account("account")
                 .password("pw")
                 .latitude(1.1)
                 .longitude(1.1)
                 .isSuggestion(true)
                 .build();
-        memberRepository.saveAndFlush(member);
+        memberRepository.save(member);
 
         restaurant = Restaurant.builder()
-                .id(1L)
                 .name("name")
                 .nameAddress("address")
                 .businessStatus("bs")
                 .city("city")
                 .licenseDate("date")
                 .build();
-        restaurantRepository.saveAndFlush(restaurant);
+        restaurantRepository.save(restaurant);
 
         review = Review.builder()
                 .score(3)
@@ -74,6 +75,7 @@ class ReviewServiceTest {
         restaurantRepository.deleteAll();
     }
 
+    @WithUserDetails(value = "account", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @Test
     void 리뷰_생성() {
         //given
@@ -81,14 +83,11 @@ class ReviewServiceTest {
 
 
         //when
-        reviewService.createReview(reviewRequestDto);
+        ReviewResponseDto dto = reviewService.createReview(reviewRequestDto);
 
         //then
-        Assertions.assertThat(review.getMember().getId()).isEqualTo(1L);
-        Assertions.assertThat(review.getRestaurant().getId()).isEqualTo(1L);
-        Assertions.assertThat(review.getScore()).isEqualTo(3);
-
-
+        Assertions.assertThat(dto.getScore()).isEqualTo(3);
+        Assertions.assertThat(dto.getContent()).isEqualTo("내용");
     }
 
 }
