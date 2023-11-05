@@ -48,14 +48,8 @@ public class RestaurantService {
         List<Restaurant> resturants = restaurantRepository.findBySigungu(sigunguSerachPattern,sortbyRating);
         //평점순 (이미 되어있음) , 거리순 sorting
         //TODO: spatial idnex 기반 거리 정렬
-        List<Restaurant> sortedRestaurants = distanceUtil.restaurantListSortByDistance(resturants, sigungu, range, sortbyRating);
+        List<RestaurantDetailResponseDto> sortedRestaurants = distanceUtil.restaurantListSortByDistance(resturants, sigungu, range, sortbyRating);
 
-        List<RestaurantDetailResponseDto> restaurantDetailResponseDtos = sortedRestaurants.stream()
-            .map(restaurant -> {
-                return RestaurantDetailResponseDto.from(restaurant);
-            })
-            .toList();
-
-        return RestaurantsResponseDto.from(restaurantDetailResponseDtos);
+        return RestaurantsResponseDto.from(sortedRestaurants);
     }
 }

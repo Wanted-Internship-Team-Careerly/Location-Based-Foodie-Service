@@ -25,6 +25,7 @@ public class RestaurantDetailResponseDto {
     private String postalCode;
     private Double latitude;
     private Double longitude;
+    private Double distance;
     private String nameAddress;
     private List<ReviewResponseDto> reviewList;
 
@@ -46,7 +47,7 @@ public class RestaurantDetailResponseDto {
             .build();
     }
 
-    public static RestaurantDetailResponseDto from(Restaurant restaurant) {
+    public static RestaurantDetailResponseDto from(Restaurant restaurant, Double distanceFrom) {
         return RestaurantDetailResponseDto.builder()
             .city(restaurant.getCity())
             .name(restaurant.getName())
@@ -59,6 +60,7 @@ public class RestaurantDetailResponseDto {
             .latitude(restaurant.getLatitude())
             .longitude(restaurant.getLongitude())
             .nameAddress(restaurant.getNameAddress())
+            .distance(distanceFrom)
             .build();
     }
 }

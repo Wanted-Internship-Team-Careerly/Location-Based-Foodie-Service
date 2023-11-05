@@ -1,5 +1,6 @@
 package com.locationbasedfoodieservice.common.util;
 
+import com.locationbasedfoodieservice.restaurant.dto.RestaurantDetailResponseDto;
 import com.locationbasedfoodieservice.restaurant.entity.Restaurant;
 import com.locationbasedfoodieservice.sigungu.entity.Sigungu;
 import java.util.AbstractMap;
@@ -28,7 +29,7 @@ public class DistanceUtil {
         return distance;
     }
 
-    public List<Restaurant> restaurantListSortByDistance(List<Restaurant> restaurantList, Sigungu sigungu,
+    public List<RestaurantDetailResponseDto> restaurantListSortByDistance(List<Restaurant> restaurantList, Sigungu sigungu,
         int range, boolean sortByRating) {
         Stream<SimpleEntry<Restaurant, Double>> restaurants = restaurantList.stream()
             // 거리 계산
@@ -38,12 +39,13 @@ public class DistanceUtil {
             // calculateDistance 결과가 range 초과인 restaurant 제거
             .filter(entry ->entry.getValue() <= range);
 
-        Stream<Restaurant> sortedRestaurant = sortByRating
-            ? restaurants.map(Entry::getKey)
+        Stream<RestaurantDetailResponseDto> sortedRestaurant = sortByRating
+            ? restaurants
+            .map(entry-> RestaurantDetailResponseDto.from(entry.getKey(),entry.getValue()))
         :restaurants
             // 거리에 따라 정렬
             .sorted(Comparator.comparingDouble(Entry::getValue))
-            .map(Entry::getKey);
+            .map(entry-> RestaurantDetailResponseDto.from(entry.getKey(),entry.getValue()));
 
         return sortedRestaurant.collect(Collectors.toList());
     }
