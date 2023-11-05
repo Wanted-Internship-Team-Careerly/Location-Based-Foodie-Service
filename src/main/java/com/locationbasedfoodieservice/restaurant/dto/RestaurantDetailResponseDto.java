@@ -23,8 +23,8 @@ public class RestaurantDetailResponseDto {
     private String streetAddress;
     private String lotNumberAddress;
     private String postalCode;
-    private double latitude;
-    private double longitude;
+    private Double latitude;
+    private Double longitude;
     private String nameAddress;
     private List<ReviewResponseDto> reviewList;
 
@@ -43,6 +43,22 @@ public class RestaurantDetailResponseDto {
             .longitude(restaurant.getLongitude())
             .nameAddress(restaurant.getNameAddress())
             .reviewList(reviewList)
+            .build();
+    }
+
+    public static RestaurantDetailResponseDto from(Restaurant restaurant) {
+        return RestaurantDetailResponseDto.builder()
+            .city(restaurant.getCity())
+            .name(restaurant.getName())
+            .licenseDate(restaurant.getLicenseDate())
+            .businessStatus(restaurant.getBusinessStatus())
+            .type(restaurant.getType())
+            .streetAddress(restaurant.getStreetAddress())
+            .lotNumberAddress(restaurant.getLotNumberAddress())
+            .postalCode(restaurant.getPostalCode())
+            .latitude(restaurant.getLatitude())
+            .longitude(restaurant.getLongitude())
+            .nameAddress(restaurant.getNameAddress())
             .build();
     }
 }

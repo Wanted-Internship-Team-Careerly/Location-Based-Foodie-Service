@@ -76,13 +76,12 @@ public class Restaurant implements Serializable {
     private List<Review> reviewList = new ArrayList<>();
 
     @Builder
-    public Restaurant(Long id, String nameAddress, String city, String name, String licenseDate,
+    public Restaurant(String nameAddress, String city, String name, String licenseDate,
         String businessStatus,
         String type, String streetAddress, String lotNumberAddress, String postalCode,
-        Double longitude, Double latitude) {
+        Double longitude, Double latitude, Double rating) {
 
         GeomUtil geomutil = new GeomUtil();
-        this.id = id;
         this.nameAddress = nameAddress;
         this.city = city;
         this.name = name;
@@ -94,6 +93,7 @@ public class Restaurant implements Serializable {
         this.postalCode = postalCode;
         this.longitude = longitude;
         this.latitude = latitude;
+        this.rating = rating;
         this.location = geomutil.createPoint(longitude, latitude);
     }
 

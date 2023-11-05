@@ -1,6 +1,8 @@
 package com.locationbasedfoodieservice.restaurant.repository;
 
+import com.locationbasedfoodieservice.restaurant.entity.QRestaurant;
 import com.locationbasedfoodieservice.restaurant.entity.Restaurant;
+import com.querydsl.core.types.Order;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,22 +26,29 @@ public class RestaurantRepositoryImpl implements
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public List<Restaurant> findwithReviewBasedSigungu(
-        String sigungu
+    public List<Restaurant> findBySigungu(
+        String sigunguSearchPattern, boolean orderByRating
     ) {
+        QRestaurant qRestaurant = QRestaurant.restaurant;
 
+        JPAQuery<Restaurant> query = jpaQueryFactory.selectFrom(qRestaurant)
+            .where(qRestaurant.streetAddress.like(sigunguSearchPattern));
+
+        OrderSpecifier<Double> orderSpecifier = new OrderSpecifier<>(Order.ASC, qRestaurant.rating);
+        if (orderByRating) {
+            query.orderBy(orderSpecifier);
+        }
+
+        List<Restaurant> restaurantList = query.fetch();
+        return restaurantList;
+    }
+
+
+    public List<Restaurant> findByPosition(
+        double lat, double lon, boolean orderByRating
+    ) {
         List<Restaurant> temp_return = null;
         return temp_return;
     }
 
-    ;
-
-    public List<Restaurant> findwithReviewBasedPosition(
-        double lat, double lon
-    ) {
-        List<Restaurant> temp_return = null;
-        return temp_return;
-    }
-
-    ;
 }

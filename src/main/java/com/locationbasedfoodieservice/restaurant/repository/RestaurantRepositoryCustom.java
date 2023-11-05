@@ -6,11 +6,11 @@ import org.springframework.stereotype.Repository;
 
 public interface RestaurantRepositoryCustom {
 
-    List<Restaurant> findwithReviewBasedSigungu(
-      String sigungu
+    List<Restaurant> findBySigungu(
+      String sigungu, boolean orderByRating
     );
 
-    List<Restaurant> findwithReviewBasedPosition(
-        double lon, double lat
+    List<Restaurant> findByPosition(
+        double lon, double lat, boolean orderByRating
     );
 }
