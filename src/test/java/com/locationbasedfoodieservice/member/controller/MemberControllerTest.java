@@ -39,7 +39,6 @@ class MemberControllerTest {
 	@BeforeEach
 	void setUp() {
 		Member member = Member.builder()
-			.id(1111L)
 			.account("test")
 			.password("1234")
 			.latitude(12.123)
@@ -65,7 +64,6 @@ class MemberControllerTest {
 		requestDto.setLongitude(12.123);
 
 		String requestBody = om.writeValueAsString(requestDto);
-
 		// when
 		ResultActions resultActions = mvc.perform(post("/api/members/signup")
 			.content(requestBody)
@@ -86,7 +84,6 @@ class MemberControllerTest {
 		requestDto.setLongitude(12.123);
 
 		String requestBody = om.writeValueAsString(requestDto);
-
 		// when
 		ResultActions resultActions = mvc.perform(post("/api/members/signup")
 			.content(requestBody)
