@@ -3,6 +3,7 @@ package com.locationbasedfoodieservice.review.service;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
+import com.locationbasedfoodieservice.common.config.auth.LoginMember;
 import java.util.Optional;
 
 import org.assertj.core.api.Assertions;
@@ -75,8 +76,10 @@ class ReviewServiceTest {
         // stub 3
         when(reviewRepository.save(any())).thenReturn(review);
 
+        LoginMember loginMember = new LoginMember(member);
+
         //when
-        ReviewResponseDto responseDto = reviewService.createReview(reviewRequestDto);
+        ReviewResponseDto responseDto = reviewService.createReview(reviewRequestDto, loginMember);
 
         //then
         Assertions.assertThat(responseDto.getContent()).isEqualTo("내용");

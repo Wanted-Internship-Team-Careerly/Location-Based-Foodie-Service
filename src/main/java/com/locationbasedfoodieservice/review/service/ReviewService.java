@@ -1,5 +1,6 @@
 package com.locationbasedfoodieservice.review.service;
 
+import com.locationbasedfoodieservice.common.config.auth.LoginMember;
 import com.locationbasedfoodieservice.common.error.CustomErrorCode;
 import com.locationbasedfoodieservice.common.exception.CustomException;
 import com.locationbasedfoodieservice.member.entity.Member;
@@ -10,6 +11,7 @@ import com.locationbasedfoodieservice.review.dto.request.ReviewRequestDto;
 import com.locationbasedfoodieservice.review.dto.response.ReviewResponseDto;
 import com.locationbasedfoodieservice.review.entity.Review;
 import com.locationbasedfoodieservice.review.repository.ReviewRepository;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,10 +26,14 @@ public class ReviewService {
     private final RestaurantRepository restaurantRepository;
 
     // member, restaurant 는 이미 생성되었다고 가정
-    public ReviewResponseDto createReview(ReviewRequestDto request) {
+    public ReviewResponseDto createReview(ReviewRequestDto request, LoginMember loginMember) {
 
         Member member = memberRepository.findById(request.getMemberId())
                 .orElseThrow(() -> new CustomException(CustomErrorCode.USER_NOT_FOUND));
+
+        if (!Objects.equals(member.getId(), loginMember.getMember().getId())) {
+            throw new CustomException(CustomErrorCode.TOKEN_USER_MISMATCH);
+        }
 
         Restaurant restaurant = restaurantRepository.findById(request.getRestaurantId())
                 .orElseThrow(() -> new CustomException(CustomErrorCode.RESTAURANT_NOT_FOUND));
