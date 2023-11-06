@@ -3,6 +3,7 @@ package com.locationbasedfoodieservice.member.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.locationbasedfoodieservice.common.config.auth.LoginMember;
 import com.locationbasedfoodieservice.common.dto.ApiResponseDto;
+import com.locationbasedfoodieservice.member.dto.MemberResponseDto;
 import com.locationbasedfoodieservice.member.dto.MemberSignupRequestDto;
 import com.locationbasedfoodieservice.member.dto.MemberUpdateRequestDto;
 import com.locationbasedfoodieservice.member.service.MemberService;
@@ -41,5 +43,13 @@ public class MemberController {
 		memberService.update(memberId, requestDto, loginMember);
 
 		return ResponseEntity.ok(new ApiResponseDto(HttpStatus.OK.value(), "회원 정보 업데이트"));
+	}
+
+	@GetMapping("/{memberId}")
+	public ResponseEntity<MemberResponseDto> get(
+		@PathVariable Long memberId,
+		@AuthenticationPrincipal LoginMember loginMember) {
+		MemberResponseDto responseDto = memberService.get(memberId, loginMember);
+		return ResponseEntity.ok().body(responseDto);
 	}
 }
