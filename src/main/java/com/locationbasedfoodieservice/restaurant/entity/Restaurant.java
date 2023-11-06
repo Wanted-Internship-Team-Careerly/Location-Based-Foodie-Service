@@ -11,8 +11,14 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Restaurant {
 
 	@Id
@@ -52,6 +58,32 @@ public class Restaurant {
 	@Column
 	private Double latitude;
 
+	@Column
+	private Double rating;
+
 	@OneToMany(mappedBy = "restaurant", orphanRemoval = true)
 	private List<Review> reviewList = new ArrayList<>();
+
+	@Builder
+	public Restaurant(Long id, String nameAddress, String city, String name, String licenseDate,
+			String businessStatus,
+			String type, String streetAddress, String lotNumberAddress, String postalCode,
+			Double longitude, Double latitude) {
+		this.id = id;
+		this.nameAddress = nameAddress;
+		this.city = city;
+		this.name = name;
+		this.licenseDate = licenseDate;
+		this.businessStatus = businessStatus;
+		this.type = type;
+		this.streetAddress = streetAddress;
+		this.lotNumberAddress = lotNumberAddress;
+		this.postalCode = postalCode;
+		this.longitude = longitude;
+		this.latitude = latitude;
+	}
+
+	public void updateRating(double rating) {
+		this.rating = rating;
+	}
 }
