@@ -68,26 +68,28 @@ public class RawRestaurant {
 	private Double refineWgs84Logt;
 
 	public void update(JSONObject rawRestaurant) {
-		this.sigunNm = rawRestaurant.isNull("SIGUN_NM") ? "" : rawRestaurant.getString("SIGUN_NM");
-		this.sigunCd = rawRestaurant.isNull("SIGUN_CD") ? "" : rawRestaurant.getString("SIGUN_CD");
-		this.licensgDe = rawRestaurant.isNull("LICENSG_DE") ? "" : rawRestaurant.getString("LICENSG_DE");
-		this.bsnStateNm = rawRestaurant.isNull("BSN_STATE_NM") ? "" : rawRestaurant.getString("BSN_STATE_NM");
-		this.clsbizDe = rawRestaurant.isNull("CLSBIZ_DE") ? "" : rawRestaurant.getString("CLSBIZ_DE");
-		this.locplcAr = rawRestaurant.isNull("LOCPLC_AR") ? 0 : Double.parseDouble(rawRestaurant.getString("LOCPLC_AR"));
-		this.gradFacltDivNm = rawRestaurant.isNull("GRAD_FACLT_DIV_NM") ? "" : rawRestaurant.getString("GRAD_FACLT_DIV_NM");
-		this.maleEnflpsnCnt = rawRestaurant.isNull("MALE_ENFLP_SN_CNT") ? 0 : rawRestaurant.getInt("MALE_ENFLP_SN_CNT");
-		this.yy = rawRestaurant.isNull("YY") ? 0 : Integer.parseInt(rawRestaurant.getString("YY"));
-		this.multiUseBizestblYn = rawRestaurant.isNull("MULTI_USE_BIZESTBL_YN") ? "" : rawRestaurant.getString("MULTI_USE_BIZESTBL_YN");
-		this.gradDivNm = rawRestaurant.isNull("GRAD_DIV_NM") ? "" : rawRestaurant.getString("GRAD_DIV_NM");
-		this.totFacltScale = rawRestaurant.isNull("TOT_FACLT_SCALE") ? 0 : Double.parseDouble(rawRestaurant.getString("TOT_FACLT_SCALE"));
-		this.femaleEnflpsnCnt = rawRestaurant.isNull("FEMALE_ENFLPSN_CNT") ? 0 : rawRestaurant.getInt("FEMALE_ENFLPSN_CNT");
-		this.bsnsiteCircumfrDivNm = rawRestaurant.isNull("BENSITE_CIRCUMFR_DIV_NM") ? "" : rawRestaurant.getString("BSNSITE_CIRCUMFR_DIV_NM");
-		this.sanittnIndutypeNm = rawRestaurant.isNull("SANITTN_INDUTYPE_NM") ? "" : rawRestaurant.getString("SANITTN_INDUTYPE_NM");
-		this.sanittnBizcondNm = rawRestaurant.isNull("SANITTN_BIZCOND_NM") ? "" : rawRestaurant.getString("SANITTN_BIZCOND_NM");
-		this.totEmplyCnt = rawRestaurant.isNull("TOT_EMPLY_CNT") ? 0 : rawRestaurant.getInt("TOT_EMPLY_CNT");
-		this.refineRoadnmAddr = rawRestaurant.isNull("REFINE_ROADNM_ADDR") ? "" : rawRestaurant.getString("REFINE_ROADNM_ADDR");
-		this.refineLotnoAddr = rawRestaurant.isNull("REFINE_LOTNO_ADDR") ? "" : rawRestaurant.getString("REFINE_LOTNO_ADDR");
-		this.refineWgs84Lat = rawRestaurant.isNull("REFINE_WGS84_LAT") ? 0 : Double.parseDouble(rawRestaurant.getString("REFINE_WGS84_LAT"));
-		this.refineWgs84Logt = rawRestaurant.isNull("REFINE_WGS84_LOGT") ? 0 : Double.parseDouble(rawRestaurant.getString("REFINE_WGS84_LOGT"));
+		this.sigunNm = rawRestaurant.optString("SIGUN_NM");
+		this.sigunCd = rawRestaurant.optString("SIGUN_CD");
+		this.bizplcNm = rawRestaurant.optString("BIZPLC_NM");
+		this.licensgDe = rawRestaurant.optString("LICENSG_DE");
+		this.bsnStateNm = rawRestaurant.optString("BSN_STATE_NM");
+		this.clsbizDe = rawRestaurant.optString("CLSBIZ_DE");
+		this.locplcAr = Double.parseDouble(rawRestaurant.optString("LOCPLC_AR", "0"));
+		this.gradFacltDivNm = rawRestaurant.optString("GRAD_FACLT_DIV_NM");
+		this.maleEnflpsnCnt = rawRestaurant.optInt("MALE_ENFLP_SN_CNT");
+		this.yy = Integer.parseInt(rawRestaurant.optString("YY", "0"));
+		this.multiUseBizestblYn = rawRestaurant.optString("MULTI_USE_BIZESTBL_YN");
+		this.gradDivNm = rawRestaurant.optString("GRAD_DIV_NM");
+		this.totFacltScale = Double.parseDouble(rawRestaurant.optString("TOT_FACLT_SCALE", "0"));
+		this.femaleEnflpsnCnt = rawRestaurant.optInt("FEMALE_ENFLPSN_CNT");
+		this.bsnsiteCircumfrDivNm = rawRestaurant.optString("BSNSITE_CIRCUMFR_DIV_NM");
+		this.sanittnIndutypeNm = rawRestaurant.optString("SANITTN_INDUTYPE_NM");
+		this.sanittnBizcondNm = rawRestaurant.optString("SANITTN_BIZCOND_NM");
+		this.totEmplyCnt = rawRestaurant.optInt("TOT_EMPLY_CNT");
+		this.refineRoadnmAddr = rawRestaurant.optString("REFINE_ROADNM_ADDR");
+		this.refineLotnoAddr = rawRestaurant.optString("REFINE_LOTNO_ADDR");
+		this.refineZipCd = Integer.parseInt(rawRestaurant.optString("REFINE_ZIP_CD"));
+		this.refineWgs84Lat = Double.parseDouble(rawRestaurant.optString("REFINE_WGS84_LAT", "0"));
+		this.refineWgs84Logt = Double.parseDouble(rawRestaurant.optString("REFINE_WGS84_LOGT", "0"));
 	}
 }
