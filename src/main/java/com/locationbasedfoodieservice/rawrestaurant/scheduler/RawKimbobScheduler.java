@@ -21,8 +21,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-import java.util.List;
 
 @Slf4j(topic = "Open Api Scheduler Log")
 @Component
@@ -111,29 +109,29 @@ public class RawKimbobScheduler {
 
 				if (targetRawRestaurant == null) {
 					RawRestaurant newRawRestaurant = RawRestaurant.builder()
-							.sigunNm(rawRestaurant.isNull("SIGUN_NM") ? "" : rawRestaurant.getString("SIGUN_NM"))
-							.sigunCd(rawRestaurant.isNull("SIGUN_CD") ? "" : rawRestaurant.getString("SIGUN_CD"))
-							.bizplcNm(rawRestaurant.getString("BIZPLC_NM"))
-							.licensgDe(rawRestaurant.isNull("LICENSG_DE") ? "" : rawRestaurant.getString("LICENSG_DE"))
-							.bsnStateNm(rawRestaurant.isNull("BSN_STATE_NM") ? "" : rawRestaurant.getString("BSN_STATE_NM"))
-							.clsbizDe(rawRestaurant.isNull("CLSBIZ_DE") ? "" : rawRestaurant.getString("CLSBIZ_DE"))
-							.locplcAr(rawRestaurant.isNull("LOCPLC_AR") ? 0 : Double.parseDouble(rawRestaurant.getString("LOCPLC_AR")))
-							.gradFacltDivNm(rawRestaurant.isNull("GRAD_FACLT_DIV_NM") ? "" : rawRestaurant.getString("GRAD_FACLT_DIV_NM"))
-							.maleEnflpsnCnt(rawRestaurant.isNull("MALE_ENFLP_SN_CNT") ? 0 : rawRestaurant.getInt("MALE_ENFLP_SN_CNT"))
-							.yy(rawRestaurant.isNull("YY") ? 0 : Integer.parseInt(rawRestaurant.getString("YY")))
-							.multiUseBizestblYn(rawRestaurant.isNull("MULTI_USE_BIZESTBL_YN") ? "" : rawRestaurant.getString("MULTI_USE_BIZESTBL_YN"))
-							.gradDivNm(rawRestaurant.isNull("GRAD_DIV_NM") ? "" : rawRestaurant.getString("GRAD_DIV_NM"))
-							.totFacltScale(rawRestaurant.isNull("TOT_FACLT_SCALE") ? 0 : Double.parseDouble(rawRestaurant.getString("TOT_FACLT_SCALE")))
-							.femaleEnflpsnCnt(rawRestaurant.isNull("FEMALE_ENFLPSN_CNT") ? 0 : rawRestaurant.getInt("FEMALE_ENFLPSN_CNT"))
-							.bsnsiteCircumfrDivNm(rawRestaurant.isNull("BENSITE_CIRCUMFR_DIV_NM") ? "" : rawRestaurant.getString("BSNSITE_CIRCUMFR_DIV_NM"))
-							.sanittnIndutypeNm(rawRestaurant.isNull("SANITTN_INDUTYPE_NM") ? "" : rawRestaurant.getString("SANITTN_INDUTYPE_NM"))
-							.sanittnBizcondNm(rawRestaurant.isNull("SANITTN_BIZCOND_NM") ? "" : rawRestaurant.getString("SANITTN_BIZCOND_NM"))
-							.totEmplyCnt(rawRestaurant.isNull("TOT_EMPLY_CNT") ? 0 : rawRestaurant.getInt("TOT_EMPLY_CNT"))
-							.refineRoadnmAddr(rawRestaurant.isNull("REFINE_ROADNM_ADDR") ? "" : rawRestaurant.getString("REFINE_ROADNM_ADDR"))
-							.refineLotnoAddr(rawRestaurant.isNull("REFINE_LOTNO_ADDR") ? "" : rawRestaurant.getString("REFINE_LOTNO_ADDR"))
-							.refineZipCd(Integer.parseInt(rawRestaurant.getString("REFINE_ZIP_CD")))
-							.refineWgs84Lat(rawRestaurant.isNull("REFINE_WGS84_LAT") ? 0 : Double.parseDouble(rawRestaurant.getString("REFINE_WGS84_LAT")))
-							.refineWgs84Logt(rawRestaurant.isNull("REFINE_WGS84_LOGT") ? 0 : Double.parseDouble(rawRestaurant.getString("REFINE_WGS84_LOGT")))
+							.sigunNm(rawRestaurant.optString("SIGUN_NM"))
+							.sigunCd(rawRestaurant.optString("SIGUN_CD"))
+							.bizplcNm(rawRestaurant.optString("BIZPLC_NM"))
+							.licensgDe(rawRestaurant.optString("LICENSG_DE"))
+							.bsnStateNm(rawRestaurant.optString("BSN_STATE_NM"))
+							.clsbizDe(rawRestaurant.optString("CLSBIZ_DE"))
+							.locplcAr(Double.parseDouble(rawRestaurant.optString("LOCPLC_AR", "0")))
+							.gradFacltDivNm(rawRestaurant.optString("GRAD_FACLT_DIV_NM"))
+							.maleEnflpsnCnt(rawRestaurant.optInt("MALE_ENFLP_SN_CNT"))
+							.yy(Integer.parseInt(rawRestaurant.optString("YY", "0")))
+							.multiUseBizestblYn(rawRestaurant.optString("MULTI_USE_BIZESTBL_YN"))
+							.gradDivNm(rawRestaurant.optString("GRAD_DIV_NM"))
+							.totFacltScale(Double.parseDouble(rawRestaurant.optString("TOT_FACLT_SCALE", "0")))
+							.femaleEnflpsnCnt(rawRestaurant.optInt("FEMALE_ENFLPSN_CNT"))
+							.bsnsiteCircumfrDivNm(rawRestaurant.optString("BSNSITE_CIRCUMFR_DIV_NM"))
+							.sanittnIndutypeNm(rawRestaurant.optString("SANITTN_INDUTYPE_NM"))
+							.sanittnBizcondNm(rawRestaurant.optString("SANITTN_BIZCOND_NM"))
+							.totEmplyCnt(rawRestaurant.optInt("TOT_EMPLY_CNT"))
+							.refineRoadnmAddr(rawRestaurant.optString("REFINE_ROADNM_ADDR"))
+							.refineLotnoAddr(rawRestaurant.optString("REFINE_LOTNO_ADDR"))
+							.refineZipCd(Integer.parseInt(rawRestaurant.optString("REFINE_ZIP_CD")))
+							.refineWgs84Lat(Double.parseDouble(rawRestaurant.optString("REFINE_WGS84_LAT", "0")))
+							.refineWgs84Logt(Double.parseDouble(rawRestaurant.optString("REFINE_WGS84_LOGT", "0")))
 							.build();
 					rawRestaurantRepository.save(newRawRestaurant);
 
