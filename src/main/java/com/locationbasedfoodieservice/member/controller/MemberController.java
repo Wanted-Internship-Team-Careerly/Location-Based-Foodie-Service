@@ -46,7 +46,7 @@ public class MemberController {
 	}
 
 	@GetMapping("/{memberId}")
-	public ResponseEntity<?> get(
+	public ResponseEntity<MemberResponseDto> get(
 		@PathVariable Long memberId,
 		@AuthenticationPrincipal LoginMember loginMember) {
 		MemberResponseDto responseDto = memberService.get(memberId, loginMember);
