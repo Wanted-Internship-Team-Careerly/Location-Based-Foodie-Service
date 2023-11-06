@@ -64,7 +64,6 @@ class MemberControllerTest {
 		requestDto.setLongitude(12.123);
 
 		String requestBody = om.writeValueAsString(requestDto);
-
 		// when
 		ResultActions resultActions = mvc.perform(post("/api/members/signup")
 			.content(requestBody)
@@ -85,7 +84,6 @@ class MemberControllerTest {
 		requestDto.setLongitude(12.123);
 
 		String requestBody = om.writeValueAsString(requestDto);
-
 		// when
 		ResultActions resultActions = mvc.perform(post("/api/members/signup")
 			.content(requestBody)
