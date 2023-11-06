@@ -16,6 +16,7 @@ import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -33,6 +34,7 @@ public class RawKimbobScheduler {
 	private String API_KEY;
 
 	private Long dataCount;
+	private Long batchSize = 999L;    // 한 번의 API 요청에 999개까지의 데이터만을 받아올 수 있습니다.
 
 	// 크론 스케줄링
 	// 첫 번째 필드: 초 (0-59)
@@ -68,8 +70,9 @@ public class RawKimbobScheduler {
 	// 데이터 총 갯수에 맞춰 for문을 돌면서 데이터를 가져옵니다.
 	// (데이터를 한 번에 1000개 이상으로 가져오지 못하기 때문)
 	@Scheduled(cron = "30 0 4 * * 6")    // 토요일 새벽 4시 업데이트
+	@Transactional
 	public void updateKimbob() {
-		long number = dataCount / 999 + 1;
+		long number = dataCount / batchSize + 1;
 
 		for (int i = 1; i <= number; i++) {
 			URI uri = UriComponentsBuilder
@@ -77,7 +80,7 @@ public class RawKimbobScheduler {
 					.queryParam("KEY", API_KEY)
 					.queryParam("Type", "json")
 					.queryParam("pIndex", i)
-					.queryParam("pSize", 999)
+					.queryParam("pSize", batchSize)
 					.encode(StandardCharsets.UTF_8)
 					.build()
 					.toUri();
