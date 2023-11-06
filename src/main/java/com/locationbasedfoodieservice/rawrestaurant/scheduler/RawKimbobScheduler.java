@@ -95,7 +95,7 @@ public class RawKimbobScheduler {
 			for (int j = 0; j < rawRestaurants.length(); j++) {
 				JSONObject rawRestaurant = rawRestaurants.getJSONObject(j);
 
-				log.info("지금은 " + j + "번째 rawRestaurant입니다\n");
+				log.info("지금은 {}번째 rawRestaurant입니다", j);
 				log.info("rawRestaurant: \n" + rawRestaurant + "\n");
 
 				// 사업장명과 우편번호가 없으면 저장하거나 업데이트하지 않습니다.
