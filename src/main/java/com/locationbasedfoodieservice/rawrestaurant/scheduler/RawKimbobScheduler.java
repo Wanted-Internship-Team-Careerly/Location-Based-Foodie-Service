@@ -107,7 +107,7 @@ public class RawKimbobScheduler {
 				String REFINE_ZIP_CD = rawRestaurant.getString("REFINE_ZIP_CD");
 
 				RawRestaurant targetRawRestaurant = rawRestaurantRepository
-						.findByBizplcNmAndRefineZipCd(BIZPLC_NM, Integer.parseInt(REFINE_ZIP_CD))
+						.findByBizplcNmAndRefineZipCd(BIZPLC_NM, REFINE_ZIP_CD)
 						.orElse(null);
 
 				if (targetRawRestaurant == null) {
