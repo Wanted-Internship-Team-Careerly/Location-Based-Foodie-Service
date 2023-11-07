@@ -27,6 +27,8 @@ public class RestaurantScheduler {
 	 */
 	@Scheduled(cron = "0 5 4 * * 6")
 	public void updateRestaurant() {
+		log.info("Data PreProcessing Start");
+
 		List<RawRestaurant> rawRestaurants = rawRestaurantRepository.findAll();
 		List<Restaurant> restaurants = new ArrayList<>();
 
