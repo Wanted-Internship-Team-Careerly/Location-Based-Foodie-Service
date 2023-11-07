@@ -26,7 +26,7 @@ public class RestaurantScheduler {
 	 * 토요일 새벽 4시에 업데이트 되는 rawRestaurant 데이터를 사용하여
 	 * Restaurant를 업데이트해주는 메서드
 	 */
-	@Scheduled(cron = "0 34 22 * * *")
+	@Scheduled(cron = "0 5 4 * * 6")
 	public void updateRestaurant() {
 		log.info("Data PreProcessing Start");
 
