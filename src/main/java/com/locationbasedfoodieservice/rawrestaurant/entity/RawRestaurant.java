@@ -96,10 +96,11 @@ public class RawRestaurant {
 		this.refineWgs84Logt = Double.parseDouble(rawRestaurant.optString("REFINE_WGS84_LOGT", "0"));
 	}
 
-	public Restaurant toRestaurant() {
+	public Restaurant toRestaurant(String uniqueKey) {
 		return Restaurant.builder()
-				.nameAddress(this.bizplcNm + this.refineRoadnmAddr)
+				.nameAddress(uniqueKey)
 				.city(this.sigunNm)
+				.name(this.bizplcNm)
 				.licenseDate(this.licensgDe)
 				.businessStatus(this.bsnStateNm)
 				.type(this.sanittnBizcondNm)
