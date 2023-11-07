@@ -3,6 +3,7 @@ package com.locationbasedfoodieservice.restaurant.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.locationbasedfoodieservice.rawrestaurant.entity.RawRestaurant;
 import com.locationbasedfoodieservice.review.entity.Review;
 
 import jakarta.persistence.Column;
@@ -15,10 +16,12 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.DynamicUpdate;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@DynamicUpdate
 public class Restaurant {
 
 	@Id
@@ -66,9 +69,9 @@ public class Restaurant {
 
 	@Builder
 	public Restaurant(Long id, String nameAddress, String city, String name, String licenseDate,
-			String businessStatus,
-			String type, String streetAddress, String lotNumberAddress, String postalCode,
-			Double longitude, Double latitude) {
+					  String businessStatus,
+					  String type, String streetAddress, String lotNumberAddress, String postalCode,
+					  Double longitude, Double latitude) {
 		this.id = id;
 		this.nameAddress = nameAddress;
 		this.city = city;
@@ -85,5 +88,18 @@ public class Restaurant {
 
 	public void updateRating(double rating) {
 		this.rating = rating;
+	}
+
+	public void update(RawRestaurant rawRestaurant) {
+		this.nameAddress = rawRestaurant.getBizplcNm() + rawRestaurant.getRefineRoadnmAddr();
+		this.city = rawRestaurant.getSigunNm();
+		this.licenseDate = rawRestaurant.getLicensgDe();
+		this.businessStatus = rawRestaurant.getBsnStateNm();
+		this.type = rawRestaurant.getSanittnBizcondNm();
+		this.streetAddress = rawRestaurant.getRefineRoadnmAddr();
+		this.lotNumberAddress = rawRestaurant.getRefineLotnoAddr();
+		this.postalCode = rawRestaurant.getRefineZipCd();
+		this.longitude = rawRestaurant.getRefineWgs84Logt();
+		this.latitude = rawRestaurant.getRefineWgs84Lat();
 	}
 }
