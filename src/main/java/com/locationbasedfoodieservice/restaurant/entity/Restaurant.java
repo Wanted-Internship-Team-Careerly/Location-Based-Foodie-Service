@@ -91,8 +91,8 @@ public class Restaurant {
 	}
 
 	public void update(RawRestaurant rawRestaurant) {
-		this.nameAddress = rawRestaurant.getBizplcNm() + rawRestaurant.getRefineRoadnmAddr();
 		this.city = rawRestaurant.getSigunNm();
+		this.name = rawRestaurant.getBizplcNm();
 		this.licenseDate = rawRestaurant.getLicensgDe();
 		this.businessStatus = rawRestaurant.getBsnStateNm();
 		this.type = rawRestaurant.getSanittnBizcondNm();
