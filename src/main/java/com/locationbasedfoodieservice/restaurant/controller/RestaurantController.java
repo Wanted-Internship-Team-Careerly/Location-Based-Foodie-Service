@@ -21,11 +21,11 @@ public class RestaurantController {
     private final RestaurantService restaurantService;
 
     @GetMapping("/api/restaurants/list/location")
-    @Operation(summary = "시군구 기반 맛집 리스트 api. 거리 단위 : meter")
+    @Operation(summary = "시군구 기반 맛집 리스트 api. 거리 단위 : km")
     public ResponseEntity<?> getRestaurantsBySigungu(
         @RequestParam() String sigungu,
         @RequestParam(name = "sort", defaultValue = "거리순", required = false) String sort,
-        @RequestParam(defaultValue = "1000.0", required = false) int range) {
+        @RequestParam(defaultValue = "1.0", required = false) double range) {
         RestaurantsResponseDto restaurants = restaurantService.getRestaurantsBySigungu(sigungu,
             sort, range);
         return ResponseEntity.ok().body(restaurants);

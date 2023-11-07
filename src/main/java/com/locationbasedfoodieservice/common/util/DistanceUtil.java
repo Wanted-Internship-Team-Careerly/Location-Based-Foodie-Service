@@ -30,7 +30,7 @@ public class DistanceUtil {
     }
 
     public List<RestaurantDetailResponseDto> restaurantListSortByDistance(List<Restaurant> restaurantList, Sigungu sigungu,
-        int range, boolean sortByRating) {
+        double range, boolean sortByRating) {
         Stream<SimpleEntry<Restaurant, Double>> restaurants = restaurantList.stream()
             // 거리 계산
             .map(r -> new SimpleEntry<>(r,
