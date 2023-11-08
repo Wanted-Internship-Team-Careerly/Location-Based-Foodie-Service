@@ -107,7 +107,7 @@ public class RawKimbobScheduler {
 				String REFINE_ZIP_CD = rawRestaurant.getString("REFINE_ZIP_CD");
 
 				RawRestaurant targetRawRestaurant = rawRestaurantRepository
-						.findByBizplcNmAndRefineZipCd(BIZPLC_NM, Integer.parseInt(REFINE_ZIP_CD))
+						.findByBizplcNmAndRefineZipCd(BIZPLC_NM, REFINE_ZIP_CD)
 						.orElse(null);
 
 				if (targetRawRestaurant == null) {
@@ -132,7 +132,7 @@ public class RawKimbobScheduler {
 							.totEmplyCnt(rawRestaurant.optInt("TOT_EMPLY_CNT"))
 							.refineRoadnmAddr(rawRestaurant.optString("REFINE_ROADNM_ADDR"))
 							.refineLotnoAddr(rawRestaurant.optString("REFINE_LOTNO_ADDR"))
-							.refineZipCd(Integer.parseInt(rawRestaurant.optString("REFINE_ZIP_CD")))
+							.refineZipCd(rawRestaurant.optString("REFINE_ZIP_CD"))
 							.refineWgs84Lat(Double.parseDouble(rawRestaurant.optString("REFINE_WGS84_LAT", "0")))
 							.refineWgs84Logt(Double.parseDouble(rawRestaurant.optString("REFINE_WGS84_LOGT", "0")))
 							.build();

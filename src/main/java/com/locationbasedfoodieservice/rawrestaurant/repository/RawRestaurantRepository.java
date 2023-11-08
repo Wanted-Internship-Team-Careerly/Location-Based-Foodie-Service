@@ -8,5 +8,5 @@ import java.util.Optional;
 
 @Repository
 public interface RawRestaurantRepository extends JpaRepository<RawRestaurant, Long> {
-	Optional<RawRestaurant> findByBizplcNmAndRefineZipCd(String name, Integer zip);
+	Optional<RawRestaurant> findByBizplcNmAndRefineZipCd(String name, String zip);
 }

@@ -1,16 +1,19 @@
 package com.locationbasedfoodieservice.rawrestaurant.entity;
 
+import com.locationbasedfoodieservice.restaurant.entity.Restaurant;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
 import org.json.JSONObject;
 
 @Entity
+@Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -61,7 +64,7 @@ public class RawRestaurant {
 	// 소재지지번주소
 	private String refineLotnoAddr;
 	// 소재지우편번호
-	private Integer refineZipCd;
+	private String refineZipCd;
 	// WGS84위도
 	private Double refineWgs84Lat;
 	// WGS84경도
@@ -88,8 +91,24 @@ public class RawRestaurant {
 		this.totEmplyCnt = rawRestaurant.optInt("TOT_EMPLY_CNT");
 		this.refineRoadnmAddr = rawRestaurant.optString("REFINE_ROADNM_ADDR");
 		this.refineLotnoAddr = rawRestaurant.optString("REFINE_LOTNO_ADDR");
-		this.refineZipCd = Integer.parseInt(rawRestaurant.optString("REFINE_ZIP_CD"));
+		this.refineZipCd = rawRestaurant.optString("REFINE_ZIP_CD");
 		this.refineWgs84Lat = Double.parseDouble(rawRestaurant.optString("REFINE_WGS84_LAT", "0"));
 		this.refineWgs84Logt = Double.parseDouble(rawRestaurant.optString("REFINE_WGS84_LOGT", "0"));
+	}
+
+	public Restaurant toRestaurant(String uniqueKey) {
+		return Restaurant.builder()
+				.nameAddress(uniqueKey)
+				.city(this.sigunNm)
+				.name(this.bizplcNm)
+				.licenseDate(this.licensgDe)
+				.businessStatus(this.bsnStateNm)
+				.type(this.sanittnBizcondNm)
+				.streetAddress(this.refineRoadnmAddr)
+				.lotNumberAddress(this.refineLotnoAddr)
+				.postalCode(this.refineZipCd)
+				.longitude(this.refineWgs84Logt)
+				.latitude(this.refineWgs84Lat)
+				.build();
 	}
 }
