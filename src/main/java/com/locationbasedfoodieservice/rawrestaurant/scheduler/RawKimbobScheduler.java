@@ -22,17 +22,19 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j(topic = "Open Api Scheduler Log")
 @Component
 @RequiredArgsConstructor
+@Transactional
 public class RawKimbobScheduler {
 	private final RestTemplate restTemplate;
 	private final RawRestaurantRepository rawRestaurantRepository;
 
 	@Value("${api.key}")
 	private String API_KEY;
-
 	private Long dataCount;
 	private Long batchSize = 999L;    // 한 번의 API 요청에 999개까지의 데이터만을 받아올 수 있습니다.
 
@@ -70,11 +72,11 @@ public class RawKimbobScheduler {
 	// 데이터 총 갯수에 맞춰 for문을 돌면서 데이터를 가져옵니다.
 	// (데이터를 한 번에 1000개 이상으로 가져오지 못하기 때문)
 	@Scheduled(cron = "30 0 4 * * 6")    // 토요일 새벽 4시 업데이트
-	@Transactional
 	public void updateKimbob() {
-		long number = dataCount / batchSize + 1;
+		long page = (dataCount / batchSize) + 1;
 
-		for (int i = 1; i <= number; i++) {
+		log.info("Kimbob Update Scheduling Start");
+		for (int i = 1; i <= page; i++) {
 			URI uri = UriComponentsBuilder
 					.fromUriString("https://openapi.gg.go.kr/Genrestrtlunch")
 					.queryParam("KEY", API_KEY)
@@ -92,61 +94,77 @@ public class RawKimbobScheduler {
 					.getJSONArray("Genrestrtlunch").getJSONObject(1)
 					.getJSONArray("row");
 
-			for (int j = 0; j < rawRestaurants.length(); j++) {
-				JSONObject rawRestaurant = rawRestaurants.getJSONObject(j);
+			updateOrSaveIfNotExists(rawRestaurants);
+		}
+		log.info("Kimbob Update Scheduling End");
+	}
 
-				log.info("지금은 {}번째 rawRestaurant입니다", j);
-				log.info("rawRestaurant: \n" + rawRestaurant + "\n");
+	/**
+	 * JSON 배열 raw데이터들을 받아서 확인 후 없으면 저장 있으면 업데이트하는 메서드입니다.
+	 *
+	 * @param rawRestaurants
+	 */
+	private void updateOrSaveIfNotExists(JSONArray rawRestaurants) {
+		// DB에 존재하지 않을 경우 list에 담아두고 한꺼번에 저장하기 위한 용도입니다.
+		List<RawRestaurant> saveRawDataList = new ArrayList<>();
 
-				// 사업장명과 우편번호가 없으면 저장하거나 업데이트하지 않습니다.
-				if (rawRestaurant.isNull("BIZPLC_NM") || rawRestaurant.isNull("REFINE_ZIP_CD")) {
-					continue;
-				}
+		for (int j = 0; j < rawRestaurants.length(); j++) {
+			JSONObject rawRestaurant = rawRestaurants.getJSONObject(j);
 
-				String BIZPLC_NM = rawRestaurant.getString("BIZPLC_NM");
-				String REFINE_ZIP_CD = rawRestaurant.getString("REFINE_ZIP_CD");
-
-				RawRestaurant targetRawRestaurant = rawRestaurantRepository
-						.findByBizplcNmAndRefineZipCd(BIZPLC_NM, REFINE_ZIP_CD)
-						.orElse(null);
-
-				if (targetRawRestaurant == null) {
-					RawRestaurant newRawRestaurant = RawRestaurant.builder()
-							.sigunNm(rawRestaurant.optString("SIGUN_NM"))
-							.sigunCd(rawRestaurant.optString("SIGUN_CD"))
-							.bizplcNm(rawRestaurant.optString("BIZPLC_NM"))
-							.licensgDe(rawRestaurant.optString("LICENSG_DE"))
-							.bsnStateNm(rawRestaurant.optString("BSN_STATE_NM"))
-							.clsbizDe(rawRestaurant.optString("CLSBIZ_DE"))
-							.locplcAr(Double.parseDouble(rawRestaurant.optString("LOCPLC_AR", "0")))
-							.gradFacltDivNm(rawRestaurant.optString("GRAD_FACLT_DIV_NM"))
-							.maleEnflpsnCnt(rawRestaurant.optInt("MALE_ENFLP_SN_CNT"))
-							.yy(Integer.parseInt(rawRestaurant.optString("YY", "0")))
-							.multiUseBizestblYn(rawRestaurant.optString("MULTI_USE_BIZESTBL_YN"))
-							.gradDivNm(rawRestaurant.optString("GRAD_DIV_NM"))
-							.totFacltScale(Double.parseDouble(rawRestaurant.optString("TOT_FACLT_SCALE", "0")))
-							.femaleEnflpsnCnt(rawRestaurant.optInt("FEMALE_ENFLPSN_CNT"))
-							.bsnsiteCircumfrDivNm(rawRestaurant.optString("BSNSITE_CIRCUMFR_DIV_NM"))
-							.sanittnIndutypeNm(rawRestaurant.optString("SANITTN_INDUTYPE_NM"))
-							.sanittnBizcondNm(rawRestaurant.optString("SANITTN_BIZCOND_NM"))
-							.totEmplyCnt(rawRestaurant.optInt("TOT_EMPLY_CNT"))
-							.refineRoadnmAddr(rawRestaurant.optString("REFINE_ROADNM_ADDR"))
-							.refineLotnoAddr(rawRestaurant.optString("REFINE_LOTNO_ADDR"))
-							.refineZipCd(rawRestaurant.optString("REFINE_ZIP_CD"))
-							.refineWgs84Lat(Double.parseDouble(rawRestaurant.optString("REFINE_WGS84_LAT", "0")))
-							.refineWgs84Logt(Double.parseDouble(rawRestaurant.optString("REFINE_WGS84_LOGT", "0")))
-							.build();
-					rawRestaurantRepository.save(newRawRestaurant);
-
-					log.info("위치 : " + rawRestaurant.getString("SIGUN_NM"));
-					log.info("이름 : " + rawRestaurant.getString("BIZPLC_NM"));
-					continue;
-				}
-
-				targetRawRestaurant.update(rawRestaurant);
+			// 사업장명과 우편번호가 없으면 raw데이터에 저장하지 않습니다.
+			if (rawRestaurant.isNull("BIZPLC_NM") || rawRestaurant.isNull("REFINE_ZIP_CD")) {
+				continue;
 			}
 
+			String BIZPLC_NM = rawRestaurant.getString("BIZPLC_NM");
+			String REFINE_ZIP_CD = rawRestaurant.getString("REFINE_ZIP_CD");
+
+			// rawRestaurant에 없으면 저장, 있으면 update합니다.
+			RawRestaurant targetRawRestaurant = rawRestaurantRepository
+					.findByBizplcNmAndRefineZipCd(BIZPLC_NM, REFINE_ZIP_CD)
+					.orElse(null);
+			if (targetRawRestaurant == null) {
+				RawRestaurant newRawRestaurant = from(rawRestaurant);
+				saveRawDataList.add(newRawRestaurant);
+				continue;
+			}
+			targetRawRestaurant.update(rawRestaurant);
 		}
+		rawRestaurantRepository.saveAll(saveRawDataList);
+	}
+
+	/**
+	 * JSON을 객체화해주는 메서드입니다.
+	 *
+	 * @param rawRestaurant
+	 * @return
+	 */
+	public RawRestaurant from(JSONObject rawRestaurant) {
+		return RawRestaurant.builder()
+				.sigunNm(rawRestaurant.optString("SIGUN_NM"))
+				.sigunCd(rawRestaurant.optString("SIGUN_CD"))
+				.bizplcNm(rawRestaurant.optString("BIZPLC_NM"))
+				.licensgDe(rawRestaurant.optString("LICENSG_DE"))
+				.bsnStateNm(rawRestaurant.optString("BSN_STATE_NM"))
+				.clsbizDe(rawRestaurant.optString("CLSBIZ_DE"))
+				.locplcAr(Double.parseDouble(rawRestaurant.optString("LOCPLC_AR", "0")))
+				.gradFacltDivNm(rawRestaurant.optString("GRAD_FACLT_DIV_NM"))
+				.maleEnflpsnCnt(rawRestaurant.optInt("MALE_ENFLP_SN_CNT"))
+				.yy(Integer.parseInt(rawRestaurant.optString("YY", "0")))
+				.multiUseBizestblYn(rawRestaurant.optString("MULTI_USE_BIZESTBL_YN"))
+				.gradDivNm(rawRestaurant.optString("GRAD_DIV_NM"))
+				.totFacltScale(Double.parseDouble(rawRestaurant.optString("TOT_FACLT_SCALE", "0")))
+				.femaleEnflpsnCnt(rawRestaurant.optInt("FEMALE_ENFLPSN_CNT"))
+				.bsnsiteCircumfrDivNm(rawRestaurant.optString("BSNSITE_CIRCUMFR_DIV_NM"))
+				.sanittnIndutypeNm(rawRestaurant.optString("SANITTN_INDUTYPE_NM"))
+				.sanittnBizcondNm(rawRestaurant.optString("SANITTN_BIZCOND_NM"))
+				.totEmplyCnt(rawRestaurant.optInt("TOT_EMPLY_CNT"))
+				.refineRoadnmAddr(rawRestaurant.optString("REFINE_ROADNM_ADDR"))
+				.refineLotnoAddr(rawRestaurant.optString("REFINE_LOTNO_ADDR"))
+				.refineZipCd(rawRestaurant.optString("REFINE_ZIP_CD"))
+				.refineWgs84Lat(Double.parseDouble(rawRestaurant.optString("REFINE_WGS84_LAT", "0")))
+				.refineWgs84Logt(Double.parseDouble(rawRestaurant.optString("REFINE_WGS84_LOGT", "0")))
+				.build();
 	}
 
 }
