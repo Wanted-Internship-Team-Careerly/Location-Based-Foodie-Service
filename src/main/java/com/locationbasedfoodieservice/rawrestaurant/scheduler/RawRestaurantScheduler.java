@@ -29,7 +29,8 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 @Transactional
-public class RawKimbobScheduler {
+public class RawRestaurantScheduler {
+
 	private final RestTemplate restTemplate;
 	private final RawRestaurantRepository rawRestaurantRepository;
 
@@ -38,19 +39,32 @@ public class RawKimbobScheduler {
 	private Long dataCount;
 	private Long batchSize = 999L;    // 한 번의 API 요청에 999개까지의 데이터만을 받아올 수 있습니다.
 
-	// 크론 스케줄링
-	// 첫 번째 필드: 초 (0-59)
-	// 두 번째 필드: 분 (0-59)
-	// 세 번째 필드: 시간 (0-23)
-	// 네 번째 필드: 일 (1-31)
-	// 다섯 번째 필드: 월 (1-12)
-	// 여섯 번째 필드: 요일 (0-6, 일요일부터 토요일까지, 일요일=0 또는 7)
+	/**
+	 * 크론 스케줄링
+	 * 첫 번째 필드: 초 (0-59)
+	 * 두 번째 필드: 분 (0-59)
+	 * 세 번째 필드: 시간 (0-23)
+	 * 네 번째 필드: 일 (1-31)
+	 * 다섯 번째 필드: 월 (1-12)
+	 * 여섯 번째 필드: 요일 (0-6, 일요일부터 토요일까지, 일요일=0 또는 7)
+	 */
 
 	// 데이터 총 개수를 가져와서 dataCount에 넣어줍니다.
 	@Scheduled(cron = "0 0 4 * * 6")
-	public void countingData() {
+	public void updateRawRestaurant() {
+		String kimbob = "Genrestrtlunch";
+		countData(kimbob);
+		updateData(kimbob);
+	}
+
+	/**
+	 * 데이터 총 개수를 가져옵니다.
+	 *
+	 * @param type 업장종류(김밥, 카페, 일식, ...)
+	 */
+	private void countData(String type) {
 		URI uri = UriComponentsBuilder
-				.fromUriString("https://openapi.gg.go.kr/Genrestrtlunch")
+				.fromUriString("https://openapi.gg.go.kr/" + type)
 				.queryParam("KEY", API_KEY)
 				.queryParam("Type", "json")
 				.queryParam("pSize", 1)
@@ -62,23 +76,26 @@ public class RawKimbobScheduler {
 		ResponseEntity<String> responseEntity = restTemplate.exchange(requestEntity, String.class);
 
 		dataCount = new JSONObject(responseEntity.getBody())
-				.getJSONArray("Genrestrtlunch").getJSONObject(0)
+				.getJSONArray(type).getJSONObject(0)
 				.getJSONArray("head").getJSONObject(0)
 				.getLong("list_total_count");
 
 		log.info("dataCount = " + dataCount);
 	}
 
-	// 데이터 총 갯수에 맞춰 for문을 돌면서 데이터를 가져옵니다.
-	// (데이터를 한 번에 1000개 이상으로 가져오지 못하기 때문)
-	@Scheduled(cron = "30 0 4 * * 6")    // 토요일 새벽 4시 업데이트
-	public void updateKimbob() {
+	/**
+	 * 데이터 총 개수에 맞춰 for문을 돌면서 데이터를 가져옵니다.
+	 *
+	 * @param type 업장종류(김밥, 카페, 일식, ...)
+	 */
+	private void updateData(String type) {
 		long page = (dataCount / batchSize) + 1;
 
-		log.info("Kimbob Update Scheduling Start");
+		log.info(type + " Update Scheduling Start");
+
 		for (int i = 1; i <= page; i++) {
 			URI uri = UriComponentsBuilder
-					.fromUriString("https://openapi.gg.go.kr/Genrestrtlunch")
+					.fromUriString("https://openapi.gg.go.kr/" + type)
 					.queryParam("KEY", API_KEY)
 					.queryParam("Type", "json")
 					.queryParam("pIndex", i)
@@ -91,16 +108,16 @@ public class RawKimbobScheduler {
 			ResponseEntity<String> responseEntity = restTemplate.exchange(requestEntity, String.class);
 
 			JSONArray rawRestaurants = new JSONObject(responseEntity.getBody())
-					.getJSONArray("Genrestrtlunch").getJSONObject(1)
+					.getJSONArray(type).getJSONObject(1)
 					.getJSONArray("row");
 
 			updateOrSaveIfNotExists(rawRestaurants);
 		}
-		log.info("Kimbob Update Scheduling End");
+		log.info(type + " Update Scheduling End");
 	}
 
 	/**
-	 * JSON 배열 raw데이터들을 받아서 확인 후 없으면 저장 있으면 업데이트하는 메서드입니다.
+	 * JSON 배열 raw데이터들을 받아서 확인 후 없으면 저장, 있으면 업데이트하는 메서드입니다.
 	 *
 	 * @param rawRestaurants
 	 */
@@ -134,8 +151,8 @@ public class RawKimbobScheduler {
 	/**
 	 * JSON을 객체화해주는 메서드입니다.
 	 *
-	 * @param rawRestaurant
-	 * @return
+	 * @param rawRestaurant JSON
+	 * @return RawRestaurant 객체
 	 */
 	public RawRestaurant from(JSONObject rawRestaurant) {
 		return RawRestaurant.builder()
