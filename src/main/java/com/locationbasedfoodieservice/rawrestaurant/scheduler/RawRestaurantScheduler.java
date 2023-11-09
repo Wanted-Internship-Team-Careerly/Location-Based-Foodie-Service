@@ -22,8 +22,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j(topic = "Open Api Scheduler Log")
 @Component
@@ -50,11 +50,12 @@ public class RawRestaurantScheduler {
 	 */
 
 	// 데이터 총 개수를 가져와서 dataCount에 넣어줍니다.
-	@Scheduled(cron = "0 0 4 * * 6")
+	@Scheduled(cron = "30 42 10 * * *")
 	public void updateRawRestaurant() {
-		String kimbob = "Genrestrtlunch";
-		countData(kimbob);
-		updateData(kimbob);
+		for (DataType type : DataType.values()) {
+			countData(type.getUrl());
+			updateData(type.getUrl());
+		}
 	}
 
 	/**
@@ -123,7 +124,7 @@ public class RawRestaurantScheduler {
 	 */
 	private void updateOrSaveIfNotExists(JSONArray rawRestaurants) {
 		// DB에 존재하지 않을 경우 list에 담아두고 한꺼번에 저장하기 위한 용도입니다.
-		List<RawRestaurant> saveRawDataList = new ArrayList<>();
+		Map<String, RawRestaurant> saveRawDataList = new HashMap<>();
 
 		for (int j = 0; j < rawRestaurants.length(); j++) {
 			JSONObject rawRestaurant = rawRestaurants.getJSONObject(j);
@@ -141,11 +142,11 @@ public class RawRestaurantScheduler {
 					targetRawRestaurant -> targetRawRestaurant.update(rawRestaurant),
 					() -> {
 						RawRestaurant newRawRestaurant = from(rawRestaurant);
-						saveRawDataList.add(newRawRestaurant);
+						saveRawDataList.put(BIZPLC_NM + REFINE_ZIP_CD, newRawRestaurant);
 					}
 			);
 		}
-		rawRestaurantRepository.saveAll(saveRawDataList);
+		rawRestaurantRepository.saveAll(saveRawDataList.values());
 	}
 
 	/**
