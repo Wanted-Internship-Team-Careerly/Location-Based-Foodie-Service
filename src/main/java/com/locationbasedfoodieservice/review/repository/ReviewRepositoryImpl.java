@@ -30,8 +30,8 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom{
 
         return queryFactory
                 .select(review)
-                .where(review.restaurant.id.eq(restaurantId))
                 .from(review)
+                .where(review.restaurant.id.eq(restaurantId))
                 .fetch();
     }
 
