@@ -7,9 +7,11 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
+@NoArgsConstructor
 public class Sigungu {
 
 	@Id
@@ -29,7 +31,7 @@ public class Sigungu {
 	private Double lat;
 
 	@Builder
-	public Sigungu(String doSi, String ssg, Double lon, Double lat){
+	public Sigungu(String doSi, String sgg, Double lon, Double lat){
 		this.doSi = doSi;
 		this.sgg = sgg;
 		this.lon = lon;

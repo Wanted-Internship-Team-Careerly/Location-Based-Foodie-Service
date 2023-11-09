@@ -12,8 +12,12 @@ import java.util.Map.Entry;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+
 public class DistanceUtil {
 
+    public  DistanceUtil(){
+
+    }
     private double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
         // 지구의 반경 (km 단위)
         final int R = 6371;

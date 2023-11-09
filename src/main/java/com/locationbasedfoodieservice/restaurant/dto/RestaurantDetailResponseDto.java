@@ -27,6 +27,7 @@ public class RestaurantDetailResponseDto {
     private Double longitude;
     private Double distance;
     private String nameAddress;
+    private Double rating;
     private List<ReviewResponseDto> reviewList;
 
     public static RestaurantDetailResponseDto from(Restaurant restaurant,
@@ -43,6 +44,7 @@ public class RestaurantDetailResponseDto {
             .latitude(restaurant.getLatitude())
             .longitude(restaurant.getLongitude())
             .nameAddress(restaurant.getNameAddress())
+            .rating(restaurant.getRating())
             .reviewList(reviewList)
             .build();
     }
@@ -60,7 +62,8 @@ public class RestaurantDetailResponseDto {
             .latitude(restaurant.getLatitude())
             .longitude(restaurant.getLongitude())
             .nameAddress(restaurant.getNameAddress())
-            .distance(distanceFrom)
+            .rating(restaurant.getRating())
+            .distance(distanceFrom) //unit of distanceutil : kilometer
             .build();
     }
 }

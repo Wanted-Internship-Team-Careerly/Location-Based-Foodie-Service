@@ -2,8 +2,9 @@ package com.locationbasedfoodieservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 
-@SpringBootApplication
+@SpringBootApplication() //test후제거할것
 public class LocationBasedFoodieServiceApplication {
 
 	public static void main(String[] args) {

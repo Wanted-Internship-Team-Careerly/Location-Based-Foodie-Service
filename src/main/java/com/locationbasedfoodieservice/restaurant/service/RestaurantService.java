@@ -27,17 +27,16 @@ public class RestaurantService {
 
     private final RestaurantRepository restaurantRepository;
     private final SigunguRepository sigunguRepository;
-    private DistanceUtil distanceUtil;
+    private DistanceUtil distanceUtil = new DistanceUtil();
     @Transactional(readOnly = true)
     public RestaurantsResponseDto getRestaurantsBySigungu(String reqSigungu, String sort, double range) {
         //Sigungu는 "광역권,도시이름"으로 받는다고 가정 (ex : "경기,군포시")
         String[] splitSgg = reqSigungu.split(",",-1);
         String Dosi = splitSgg[0];
-        String Sgg = splitSgg[1];
-        if (Sgg.isEmpty()) {
+        if (splitSgg.length < 2) {
             throw new CustomException(INVALID_SIGUNGU_EXCEPTION);
         }
-
+        String Sgg = splitSgg[1];
         Sigungu sigungu = sigunguRepository.findByDoSiAndSgg(Dosi, Sgg).orElseThrow(
             () -> new CustomException(SIGUNGU_NOT_FOUND)
         );

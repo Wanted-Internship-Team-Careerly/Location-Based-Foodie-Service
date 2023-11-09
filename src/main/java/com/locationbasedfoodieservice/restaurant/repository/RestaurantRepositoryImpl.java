@@ -34,9 +34,10 @@ public class RestaurantRepositoryImpl implements
         QRestaurant qRestaurant = QRestaurant.restaurant;
 
         JPAQuery<Restaurant> query = jpaQueryFactory.selectFrom(qRestaurant)
-            .where(qRestaurant.streetAddress.like(sigunguSearchPattern));
+            .where(qRestaurant.streetAddress.like(sigunguSearchPattern))
+            .where(qRestaurant.businessStatus.eq("영업"));
 
-        OrderSpecifier<Double> orderSpecifier = new OrderSpecifier<>(Order.ASC, qRestaurant.rating);
+        OrderSpecifier<Double> orderSpecifier = new OrderSpecifier<>(Order.DESC, qRestaurant.rating);
         if (orderByRating) {
             query.orderBy(orderSpecifier);
         }
