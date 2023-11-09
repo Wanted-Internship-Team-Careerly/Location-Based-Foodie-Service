@@ -10,14 +10,17 @@ import com.locationbasedfoodieservice.review.repository.ReviewRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class RestaurantService {
 
     private final RestaurantRepository restaurantRepository;
     private final ReviewRepository reviewRepository;
 
+    @Transactional(readOnly = true)
     public RestaurantResponseDto getRestaurant(Long restaurantId) {
         Restaurant restaurant = restaurantRepository.findById(restaurantId)
                 .orElseThrow(() -> new CustomException(CustomErrorCode.RESTAURANT_NOT_FOUND));
