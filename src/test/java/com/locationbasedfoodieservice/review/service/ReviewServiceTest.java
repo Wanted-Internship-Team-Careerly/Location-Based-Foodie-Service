@@ -41,29 +41,29 @@ class ReviewServiceTest {
     void 리뷰_생성() {
         //given
         Member member = Member.builder()
-                .id(1L)
-                .account("account1")
-                .password("pw")
-                .latitude(1.1)
-                .longitude(1.1)
-                .isSuggestion(true)
-                .build();
+            .id(1L)
+            .account("account1")
+            .password("pw")
+            .latitude(1.1)
+            .longitude(1.1)
+            .isSuggestion(true)
+            .build();
 
         Restaurant restaurant = Restaurant.builder()
-            .(1L)
-                .name("name")
-                .nameAddress("address")
-                .businessStatus("bs")
-                .city("city")
-                .licenseDate("date")
-                .build();
+            .id(1L)
+            .name("name")
+            .nameAddress("address")
+            .businessStatus("bs")
+            .city("city")
+            .licenseDate("date")
+            .build();
 
         Review review = Review.builder()
-                .score(3)
-                .content("내용")
-                .member(member)
-                .restaurant(restaurant)
-                .build();
+            .score(3)
+            .content("내용")
+            .member(member)
+            .restaurant(restaurant)
+            .build();
 
         ReviewRequestDto reviewRequestDto = new ReviewRequestDto(3, "내용", 1L, 1L);
 
