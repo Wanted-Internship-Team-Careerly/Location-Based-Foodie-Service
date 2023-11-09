@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "Restaurant API", description = "Restaurant 관련 API 정보를 담고 있습니다.")
 @Slf4j
 @RequiredArgsConstructor
-@RestController
 public class RestaurantService {
 
     private final RestaurantRepository restaurantRepository;
