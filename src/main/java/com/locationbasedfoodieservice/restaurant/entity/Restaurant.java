@@ -1,12 +1,11 @@
 package com.locationbasedfoodieservice.restaurant.entity;
 
-<<<<<<< HEAD
-=======
+
 import java.util.ArrayList;
 import java.util.List;
 
 import com.locationbasedfoodieservice.rawrestaurant.entity.RawRestaurant;
->>>>>>> 5eab5e053ab8951e6db21661259b8c5ead5d494d
+
 import com.locationbasedfoodieservice.review.entity.Review;
 import com.locationbasedfoodieservice.common.util.GeomUtil;
 
@@ -17,14 +16,11 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Index;
 import jakarta.persistence.OneToMany;
-<<<<<<< HEAD
+
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-=======
->>>>>>> 5eab5e053ab8951e6db21661259b8c5ead5d494d
+
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;

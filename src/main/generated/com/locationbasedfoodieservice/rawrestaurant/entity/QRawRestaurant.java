@@ -25,7 +25,7 @@ public class QRawRestaurant extends EntityPathBase<RawRestaurant> {
 
     public final StringPath bsnStateNm = createString("bsnStateNm");
 
-    public final NumberPath<Integer> clsbizDe = createNumber("clsbizDe", Integer.class);
+    public final StringPath clsbizDe = createString("clsbizDe");
 
     public final NumberPath<Integer> femaleEnflpsnCnt = createNumber("femaleEnflpsnCnt", Integer.class);
 
@@ -35,7 +35,7 @@ public class QRawRestaurant extends EntityPathBase<RawRestaurant> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
-    public final NumberPath<Integer> licensgDe = createNumber("licensgDe", Integer.class);
+    public final StringPath licensgDe = createString("licensgDe");
 
     public final NumberPath<Double> locplcAr = createNumber("locplcAr", Double.class);
 
@@ -51,17 +51,17 @@ public class QRawRestaurant extends EntityPathBase<RawRestaurant> {
 
     public final NumberPath<Double> refineWgs84Logt = createNumber("refineWgs84Logt", Double.class);
 
-    public final NumberPath<Integer> refineZipCd = createNumber("refineZipCd", Integer.class);
+    public final StringPath refineZipCd = createString("refineZipCd");
 
     public final StringPath sanittnBizcondNm = createString("sanittnBizcondNm");
 
     public final StringPath sanittnIndutypeNm = createString("sanittnIndutypeNm");
 
-    public final NumberPath<Integer> sigunCd = createNumber("sigunCd", Integer.class);
+    public final StringPath sigunCd = createString("sigunCd");
 
     public final StringPath sigunNm = createString("sigunNm");
 
-    public final NumberPath<Integer> totEmptyCnt = createNumber("totEmptyCnt", Integer.class);
+    public final NumberPath<Integer> totEmplyCnt = createNumber("totEmplyCnt", Integer.class);
 
     public final NumberPath<Double> totFacltScale = createNumber("totFacltScale", Double.class);
 
