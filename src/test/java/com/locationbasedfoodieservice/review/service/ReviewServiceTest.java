@@ -56,6 +56,8 @@ class ReviewServiceTest {
             .businessStatus("bs")
             .city("city")
             .licenseDate("date")
+            .latitude(1.1)
+            .longitude(1.1)
             .build();
 
         Review review = Review.builder()
