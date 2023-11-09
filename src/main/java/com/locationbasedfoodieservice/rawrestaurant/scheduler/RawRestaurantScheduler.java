@@ -25,7 +25,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
-@Slf4j(topic = "Open Api Scheduler Log")
+@Slf4j(topic = "Open API Scheduler Log")
 @Component
 @RequiredArgsConstructor
 @Transactional
@@ -50,7 +50,7 @@ public class RawRestaurantScheduler {
 	 */
 
 	// 데이터 총 개수를 가져와서 dataCount에 넣어줍니다.
-	@Scheduled(cron = "30 42 10 * * *")
+	@Scheduled(cron = "0 0 4 * * 6")
 	public void updateRawRestaurant() {
 		for (DataType type : DataType.values()) {
 			countData(type.getUrl());
