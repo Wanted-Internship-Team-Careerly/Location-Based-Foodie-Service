@@ -120,15 +120,13 @@ public class RawKimbobScheduler {
 			String REFINE_ZIP_CD = rawRestaurant.getString("REFINE_ZIP_CD");
 
 			// rawRestaurant에 없으면 저장, 있으면 update합니다.
-			RawRestaurant targetRawRestaurant = rawRestaurantRepository
-					.findByBizplcNmAndRefineZipCd(BIZPLC_NM, REFINE_ZIP_CD)
-					.orElse(null);
-			if (targetRawRestaurant == null) {
-				RawRestaurant newRawRestaurant = from(rawRestaurant);
-				saveRawDataList.add(newRawRestaurant);
-				continue;
-			}
-			targetRawRestaurant.update(rawRestaurant);
+			rawRestaurantRepository.findByBizplcNmAndRefineZipCd(BIZPLC_NM, REFINE_ZIP_CD).ifPresentOrElse(
+					targetRawRestaurant -> targetRawRestaurant.update(rawRestaurant),
+					() -> {
+						RawRestaurant newRawRestaurant = from(rawRestaurant);
+						saveRawDataList.add(newRawRestaurant);
+					}
+			);
 		}
 		rawRestaurantRepository.saveAll(saveRawDataList);
 	}
