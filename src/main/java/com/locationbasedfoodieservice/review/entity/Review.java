@@ -47,4 +47,9 @@ public class Review extends Timestamped {
 		this.member = member;
 		this.restaurant = restaurant;
 	}
+
+	public void addRestaurant(Restaurant restaurant) {
+		this.restaurant = restaurant;
+		restaurant.getReviewList().add(this);
+	}
 }
