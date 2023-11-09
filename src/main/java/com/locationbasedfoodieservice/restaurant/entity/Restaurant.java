@@ -1,5 +1,6 @@
 package com.locationbasedfoodieservice.restaurant.entity;
 
+import jakarta.persistence.FetchType;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,7 +65,10 @@ public class Restaurant {
 	@Column
 	private Double rating;
 
-	@OneToMany(mappedBy = "restaurant", orphanRemoval = true)
+	@OneToMany(
+			mappedBy = "restaurant", orphanRemoval = true,
+			fetch = FetchType.LAZY
+	)
 	private List<Review> reviewList = new ArrayList<>();
 
 	@Builder
