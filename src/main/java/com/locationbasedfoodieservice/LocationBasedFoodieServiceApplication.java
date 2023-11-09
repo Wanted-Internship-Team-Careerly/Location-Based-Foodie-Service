@@ -2,13 +2,14 @@ package com.locationbasedfoodieservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
-@SpringBootApplication() //test후제거할것
+@EnableScheduling
+@SpringBootApplication
 public class LocationBasedFoodieServiceApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(LocationBasedFoodieServiceApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(LocationBasedFoodieServiceApplication.class, args);
+    }
 
 }

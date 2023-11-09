@@ -1,12 +1,10 @@
 package com.locationbasedfoodieservice.restaurant.repository;
 
-import java.util.Optional;
-
+import com.locationbasedfoodieservice.restaurant.entity.Restaurant;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.locationbasedfoodieservice.restaurant.entity.Restaurant;
-import org.springframework.stereotype.Repository;
+import java.util.Optional;
 
-public interface RestaurantRepository extends JpaRepository<Restaurant, Long>, RestaurantRepositoryCustom{
-
+public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
+	Optional<Restaurant> findByNameAddress(String nameAddress);
 }

@@ -1,5 +1,12 @@
 package com.locationbasedfoodieservice.restaurant.entity;
 
+<<<<<<< HEAD
+=======
+import java.util.ArrayList;
+import java.util.List;
+
+import com.locationbasedfoodieservice.rawrestaurant.entity.RawRestaurant;
+>>>>>>> 5eab5e053ab8951e6db21661259b8c5ead5d494d
 import com.locationbasedfoodieservice.review.entity.Review;
 import com.locationbasedfoodieservice.common.util.GeomUtil;
 
@@ -10,21 +17,26 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Index;
 import jakarta.persistence.OneToMany;
+<<<<<<< HEAD
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+=======
+>>>>>>> 5eab5e053ab8951e6db21661259b8c5ead5d494d
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.geom.GeometryFactory;
+import org.hibernate.annotations.DynamicUpdate;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@DynamicUpdate
 @Table(indexes = @Index(name = "location", columnList = "location"))
 public class Restaurant implements Serializable {
 
@@ -75,6 +87,7 @@ public class Restaurant implements Serializable {
     @OneToMany(mappedBy = "restaurant", orphanRemoval = true)
     private List<Review> reviewList = new ArrayList<>();
 
+
     @Builder
     public Restaurant(String nameAddress, String city, String name, String licenseDate,
         String businessStatus,
@@ -99,5 +112,24 @@ public class Restaurant implements Serializable {
 
     public void updateRating(double rating) {
         this.rating = rating;
+    }
+
+
+
+	public void update(RawRestaurant rawRestaurant) {
+        GeomUtil geomutil = new GeomUtil();
+
+        this.city = rawRestaurant.getSigunNm();
+		this.name = rawRestaurant.getBizplcNm();
+		this.licenseDate = rawRestaurant.getLicensgDe();
+		this.businessStatus = rawRestaurant.getBsnStateNm();
+		this.type = rawRestaurant.getSanittnBizcondNm();
+		this.streetAddress = rawRestaurant.getRefineRoadnmAddr();
+		this.lotNumberAddress = rawRestaurant.getRefineLotnoAddr();
+		this.postalCode = rawRestaurant.getRefineZipCd();
+		this.longitude = rawRestaurant.getRefineWgs84Logt();
+		this.latitude = rawRestaurant.getRefineWgs84Lat();
+        this.location = geomutil.createPoint(longitude, latitude);
+
     }
 }
