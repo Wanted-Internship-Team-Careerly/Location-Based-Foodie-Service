@@ -50,7 +50,7 @@ class ReviewServiceTest {
                 .build();
 
         Restaurant restaurant = Restaurant.builder()
-                .id(1L)
+            .(1L)
                 .name("name")
                 .nameAddress("address")
                 .businessStatus("bs")
