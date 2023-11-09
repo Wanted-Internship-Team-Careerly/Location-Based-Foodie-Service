@@ -28,6 +28,7 @@ public class RestaurantResponseDto {
     private double rating;
     private List<ReviewResponseDto> reviewList;
 
+    // 가게 정보와 해당 가게에 작성된 review 들을 return
     public static RestaurantResponseDto from(Restaurant restaurant, List<ReviewResponseDto> reviewList) {
         return RestaurantResponseDto.builder()
                 .restaurantId(restaurant.getId())
