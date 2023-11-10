@@ -39,9 +39,9 @@ public class RawRestaurantScheduler {
 	private final RawRestaurantJdbcRepository rawRestaurantJdbcRepository;
 
 	@Value("${api.key}")
-	private String API_KEY;
+	private String apiKey;
 	private Long dataCount;
-	private final Long batchSize = 999L;    // 한 번의 API 요청에 999개까지의 데이터만을 받아올 수 있습니다.
+	private final Long BATCH_SIZE = 999L;    // 한 번의 API 요청에 999개까지의 데이터만을 받아올 수 있습니다.
 
 	/**
 	 * 크론 스케줄링
@@ -72,7 +72,7 @@ public class RawRestaurantScheduler {
 	private void countData(String type) {
 		URI uri = UriComponentsBuilder
 			.fromUriString("https://openapi.gg.go.kr/" + type)
-			.queryParam("KEY", API_KEY)
+			.queryParam("KEY", apiKey)
 			.queryParam("Type", "json")
 			.queryParam("pSize", 1)
 			.encode(StandardCharsets.UTF_8)
@@ -96,17 +96,17 @@ public class RawRestaurantScheduler {
 	 * @param type 업장종류(김밥, 카페, 일식, ...)
 	 */
 	private void updateData(String type) {
-		long page = (dataCount / batchSize) + 1;
+		long page = (dataCount / BATCH_SIZE) + 1;
 
 		log.info(type + " Update Scheduling Start");
 
 		for (int i = 1; i <= page; i++) {
 			URI uri = UriComponentsBuilder
 				.fromUriString("https://openapi.gg.go.kr/" + type)
-				.queryParam("KEY", API_KEY)
+				.queryParam("KEY", apiKey)
 				.queryParam("Type", "json")
 				.queryParam("pIndex", i)
-				.queryParam("pSize", batchSize)
+				.queryParam("pSize", BATCH_SIZE)
 				.encode(StandardCharsets.UTF_8)
 				.build()
 				.toUri();
