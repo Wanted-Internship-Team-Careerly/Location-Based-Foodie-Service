@@ -1,6 +1,5 @@
 package com.locationbasedfoodieservice.restaurant.entity;
 
-import jakarta.persistence.FetchType;
 import java.util.ArrayList;
 import java.util.List;
 
