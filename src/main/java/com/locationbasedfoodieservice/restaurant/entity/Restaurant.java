@@ -65,10 +65,7 @@ public class Restaurant {
 	@Column
 	private Double rating;
 
-	@OneToMany(
-			mappedBy = "restaurant", orphanRemoval = true,
-			fetch = FetchType.LAZY
-	)
+	@OneToMany(mappedBy = "restaurant", orphanRemoval = true)
 	private List<Review> reviewList = new ArrayList<>();
 
 	@Builder
