@@ -41,7 +41,8 @@ public class Review extends Timestamped {
 	private Restaurant restaurant;
 
 	@Builder
-	public Review(Integer score, String content, Member member, Restaurant restaurant) {
+	public Review(Long id, Integer score, String content, Member member, Restaurant restaurant) {
+		this.id = id;
 		this.score = score;
 		this.content = content;
 		this.member = member;
