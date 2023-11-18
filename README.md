@@ -122,12 +122,19 @@ Swagger : http://localhost:{port}/swagger#/
 ## 구현과정(설계 및 의도)
 
 <details>
-<summary>Post entity 설계 시 관계 설정 고려- click</summary>
+<summary>entity 설계 시 고려사항- click</summary>
 
-- **태그 관계**
-    1. 각 게시물은 여러 개의 해시태그를 포함할 수 있습니다.
-    2. 각 해시태그는 여러 게시물에 포함될 수 있습니다.
-    3. Post 엔터티와 Tag 엔터티 간의 다대다 관계를 @JoinTable post-tag 테이블을 통해 관리하여 검색과 분류에 용이하도록 설계했습니다.
+- 주요 도메인으로 post, user, hashtag 로 나누기로 함
+- 요구사항으로 JWT를 통해 유효성을 검증한다는 내용이 있음
+  - 이에 대해 JWT와 세션을 함께 구현할까 고민하였지만 우선순위가 아니므로 추후 시간이 남으면 개발
+- 좋아요 기능
+  - 기존에는 post_like를 통해 user와 post에 대해 커넥션을 맺어 post_like로 좋아요를 관리하려 하였음
+    - 하지만 요구사항에 좋아요 중복 허용, 좋아요 한 게시글과 같이 post_like를 필요로 하는 부분이 없었으므로 post 테이블에서 int로 like를 관리하기로 함
+- post에 uuid를 사용하는 것이 요구사항에 있었음
+  - 요구사항이 이렇게 정의된 것은 PK를 외부에 노출시키지 않기 위한것이라 생각되어 PK를 따로 만듦
+    - PK는 해당 테이블의 고유 식별자이며 자동으로 증가하도록 값을 설정하는 것이 좋다고 생각함
+- hashtag 기능
+  - Post와 HashTag의 관계를 Post_Hashtag가 관리함으로써 요구사항인 hashtag에 일치하는 값만 검색되도록 구현함
 
 </details>
 
