@@ -100,17 +100,11 @@ Swagger : http://localhost:{port}/swagger#/
 <details>
 
 <summary>Get all posts - click</summary>
-<img src="./public/fullApi.png" alt="logo" width="80%" />
-<img src="./public/posts.png" alt="logo" width="80%" />
-<img src="./public/posts_id.png" alt="logo" width="80%" />
-<img src="./public/posts_like.png" alt="logo" width="80%" />
-<img src="./public/posts_share.png" alt="logo" width="80%" />
-<img src="./public/statistics.png" alt="logo" width="80%" />
-<img src="./public/user_signup.png" alt="logo" width="80%" />
-<img src="./public/auth_login.png" alt="logo" width="80%" />
-<img src="./public/auth_verify.png" alt="logo" width="80%" />
-<img src="./public/auth_confirmcode.png" alt="logo" width="80%" />
-
+<img src="./public/full.png" alt="logo" width="80%" />
+<img src="./public/members_get.png" alt="logo" width="80%" />
+<img src="./public/members_post.png" alt="logo" width="80%" />
+<img src="./public/members_put.png" alt="logo" width="80%" />
+<img src="./public/reviews_post.png" alt="logo" width="80%" />
 </details>
 
 <br/>
@@ -121,7 +115,7 @@ Swagger : http://localhost:{port}/swagger#/
 
 [프로젝트 관리 페이지](https://www.notion.so/Team-Careerly-8d62334735154f7f9b9cbba91da21df5)
 
-<img src="./public/timeline.PNG" alt="logo" width="80%" />
+<img src="./public/timeline.png" alt="logo" width="80%" />
 
 <br/>
 
