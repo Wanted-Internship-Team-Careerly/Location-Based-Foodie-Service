@@ -59,6 +59,7 @@ class ReviewServiceTest {
                 .build();
 
         Review review = Review.builder()
+                .id(1L)
                 .score(3)
                 .content("내용")
                 .member(member)

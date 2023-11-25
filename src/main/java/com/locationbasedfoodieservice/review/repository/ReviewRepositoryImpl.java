@@ -2,7 +2,9 @@ package com.locationbasedfoodieservice.review.repository;
 
 import static com.locationbasedfoodieservice.review.entity.QReview.review;
 
+import com.locationbasedfoodieservice.review.entity.Review;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -21,6 +23,16 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom{
                 .where(review.restaurant.id.eq(restaurantId))
                 .from(review)
                 .fetchFirst());
+    }
+
+    @Override
+    public List<Review> findReviewsByRestaurantId(Long restaurantId) {
+
+        return queryFactory
+                .select(review)
+                .from(review)
+                .where(review.restaurant.id.eq(restaurantId))
+                .fetch();
     }
 
 }

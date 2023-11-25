@@ -39,6 +39,7 @@ public class ReviewService {
                 .orElseThrow(() -> new CustomException(CustomErrorCode.RESTAURANT_NOT_FOUND));
 
         Review savedReview = reviewRepository.save(request.toEntity(member, restaurant));
+        savedReview.addRestaurant(restaurant);
 
         int totalReviewNum = reviewRepository.findCountByRestaurantId(request.getRestaurantId());
         int reviewScore = request.getScore();
